@@ -1,0 +1,12 @@
+{
+  "id": "obsidian-ai-plugin",
+  "name": "Obsidian AI with RAG & Embedding",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Advanced AI plugin with RAG, Embedding, Notion/Airtable integration, and multi-model support",
+  "author": "Obsidian AI Plugin Team",
+  "authorUrl": "https://github.com/obsidian-ai-plugin/obsidian-ai-plugin",
+  "fundingUrl": "https://github.com/sponsors/obsidian-ai-plugin",
+  "isDesktopOnly": false
+}
+
