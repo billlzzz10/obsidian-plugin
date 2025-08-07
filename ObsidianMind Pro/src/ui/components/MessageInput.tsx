@@ -30,7 +30,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, disab
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         setMessage(e.target.value);
-        
+
         // Auto-resize textarea
         if (textareaRef.current) {
             textareaRef.current.style.height = 'auto';
@@ -53,7 +53,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage, disab
                     value={message}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
-                    placeholder={disabled ? "AI is thinking..." : "Ask me anything about your notes..."}
+                    placeholder={disabled ? 'AI is thinking...' : 'Ask me anything about your notes...'}
                     disabled={disabled}
                     rows={1}
                 />

@@ -41,7 +41,7 @@ export class ChatService {
 
         // Get RAG context
         const ragResult = await this.ragService.performRAG(userMessage);
-        
+
         // Create prompt with RAG context
         const prompt = await this.ragService.createRAGPrompt(userMessage);
 

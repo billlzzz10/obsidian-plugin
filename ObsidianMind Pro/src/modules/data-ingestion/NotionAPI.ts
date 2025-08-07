@@ -18,7 +18,7 @@ export class NotionAPI {
         }
 
         const pages: NotionPage[] = [];
-        
+
         for (const databaseId of this.plugin.settings.notionDatabaseIds) {
             try {
                 const databasePages = await this.fetchPagesFromDatabase(databaseId);

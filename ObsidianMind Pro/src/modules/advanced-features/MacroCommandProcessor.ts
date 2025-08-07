@@ -136,7 +136,7 @@ export class MacroCommandProcessor {
                         const promptParams: Record<string, any> = {};
                         if (step.parameters) {
                             for (const [paramKey, paramValue] of Object.entries(step.parameters)) {
-                                promptParams[paramKey] = typeof paramValue === 'string' 
+                                promptParams[paramKey] = typeof paramValue === 'string'
                                     ? this.replaceVariablesInString(paramValue, variables)
                                     : paramValue;
                             }
@@ -147,7 +147,7 @@ export class MacroCommandProcessor {
                         const toolParams: Record<string, any> = {};
                         if (step.parameters) {
                             for (const [paramKey, paramValue] of Object.entries(step.parameters)) {
-                                toolParams[paramKey] = typeof paramValue === 'string' 
+                                toolParams[paramKey] = typeof paramValue === 'string'
                                     ? this.replaceVariablesInString(paramValue, variables)
                                     : paramValue;
                             }
@@ -203,23 +203,23 @@ export class MacroCommandProcessor {
 
     async addCustomMacroCommand(macro: MacroCommand): Promise<void> {
         this.macroCommands.set(macro.id, macro);
-        
+
         const customMacros = this.plugin.settings.customMacroCommands || [];
         const existingIndex = customMacros.findIndex(m => m.id === macro.id);
-        
+
         if (existingIndex >= 0) {
             customMacros[existingIndex] = macro;
         } else {
             customMacros.push(macro);
         }
-        
+
         this.plugin.settings.customMacroCommands = customMacros;
         await this.plugin.saveData(this.plugin.settings);
     }
 
     async removeCustomMacroCommand(macroId: string): Promise<void> {
         this.macroCommands.delete(macroId);
-        this.plugin.settings.customMacroCommands = 
+        this.plugin.settings.customMacroCommands =
             (this.plugin.settings.customMacroCommands || []).filter(m => m.id !== macroId);
         await this.plugin.saveData(this.plugin.settings);
     }

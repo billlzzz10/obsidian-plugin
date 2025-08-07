@@ -41,19 +41,19 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                         <div className="ai-plugin-suggestions">
                             <button
                                 className="ai-plugin-suggestion"
-                                onClick={() => onSendMessage("What are the main topics in my notes?")}
+                                onClick={() => onSendMessage('What are the main topics in my notes?')}
                             >
                                 What are the main topics in my notes?
                             </button>
                             <button
                                 className="ai-plugin-suggestion"
-                                onClick={() => onSendMessage("Summarize my recent work")}
+                                onClick={() => onSendMessage('Summarize my recent work')}
                             >
                                 Summarize my recent work
                             </button>
                             <button
                                 className="ai-plugin-suggestion"
-                                onClick={() => onSendMessage("Help me find information about...")}
+                                onClick={() => onSendMessage('Help me find information about...')}
                             >
                                 Help me find information about...
                             </button>

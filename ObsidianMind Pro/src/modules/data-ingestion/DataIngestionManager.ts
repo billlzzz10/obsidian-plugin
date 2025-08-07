@@ -55,7 +55,7 @@ export class DataIngestionManager {
 
     async syncExternalData(): Promise<void> {
         console.log('Starting external data sync...');
-        
+
         // Sync Notion data
         if (this.plugin.settings.notionIntegrationToken && this.plugin.settings.notionDatabaseIds.length > 0) {
             await this.syncNotionData();
@@ -121,7 +121,7 @@ export class DataIngestionManager {
         for (const file of markdownFiles) {
             const content = await this.plugin.app.vault.read(file);
             const { frontmatter, content: cleanedContent } = extractFrontmatter(content);
-            
+
             notes.push({
                 path: file.path,
                 name: file.basename,
@@ -129,7 +129,7 @@ export class DataIngestionManager {
                 frontmatter: frontmatter,
                 tags: this.getTagsFromFile(file, frontmatter),
                 createdAt: new Date(file.stat.ctime),
-                updatedAt: new Date(file.stat.mtime),
+                updatedAt: new Date(file.stat.mtime)
             });
         }
         return notes;

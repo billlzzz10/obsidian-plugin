@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import AIPlugin from "../../main";
+import AIPlugin from '../../main';
 
 interface SettingsPanelProps {
     plugin: AIPlugin;
@@ -30,7 +30,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     const renderModelsTab = () => (
         <div className="ai-plugin-settings-tab">
             <h3>AI Models</h3>
-            
+
             <div className="ai-plugin-setting-group">
                 <label>Selected Model:</label>
                 <select
@@ -88,7 +88,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     const renderRAGTab = () => (
         <div className="ai-plugin-settings-tab">
             <h3>RAG & Embedding Settings</h3>
-            
+
             <div className="ai-plugin-setting-group">
                 <label>Embedding Model:</label>
                 <select
@@ -161,7 +161,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     const renderIntegrationsTab = () => (
         <div className="ai-plugin-settings-tab">
             <h3>External Integrations</h3>
-            
+
             <div className="ai-plugin-setting-group">
                 <label>Notion Integration Token:</label>
                 <input

@@ -207,7 +207,7 @@ export class ToolManager {
 
     private async executeApiTool(toolConfig: any, params: Record<string, any>): Promise<any> {
         const { endpoint, method = 'POST', headers = {} } = toolConfig;
-        
+
         const response = await fetch(endpoint, {
             method: method,
             headers: {
@@ -234,7 +234,7 @@ export class ToolManager {
     private async searchNotes(params: Record<string, any>): Promise<any> {
         const { query, maxResults = 5 } = params;
         const sources = await this.plugin.ragService.getRelevantSources(query, maxResults);
-        
+
         return {
             results: sources.map(source => ({
                 title: source.title,
@@ -248,7 +248,7 @@ export class ToolManager {
     private async createNote(params: Record<string, any>): Promise<any> {
         const { title, content, folder } = params;
         const path = folder ? `${folder}/${title}.md` : `${title}.md`;
-        
+
         try {
             await this.plugin.app.vault.create(path, content);
             return { success: true, path: path };
@@ -259,13 +259,13 @@ export class ToolManager {
 
     private async getNoteContent(params: Record<string, any>): Promise<any> {
         const { notePath } = params;
-        
+
         try {
             const file = this.plugin.app.vault.getAbstractFileByPath(notePath);
             if (!file) {
                 throw new Error(`Note not found: ${notePath}`);
             }
-            
+
             const content = await this.plugin.app.vault.read(file as any);
             return { content: content };
         } catch (error) {
@@ -275,19 +275,19 @@ export class ToolManager {
 
     private async updateNote(params: Record<string, any>): Promise<any> {
         const { notePath, content, append = false } = params;
-        
+
         try {
             const file = this.plugin.app.vault.getAbstractFileByPath(notePath);
             if (!file) {
                 throw new Error(`Note not found: ${notePath}`);
             }
-            
+
             let newContent = content;
             if (append) {
                 const existingContent = await this.plugin.app.vault.read(file as any);
                 newContent = existingContent + '\n\n' + content;
             }
-            
+
             await this.plugin.app.vault.modify(file as any, newContent);
             return { success: true };
         } catch (error) {
@@ -297,15 +297,15 @@ export class ToolManager {
 
     private async listNotes(params: Record<string, any>): Promise<any> {
         const { folder, tags } = params;
-        
+
         let files = this.plugin.app.vault.getMarkdownFiles();
-        
+
         if (folder) {
             files = files.filter(file => file.path.startsWith(folder));
         }
-        
+
         // TODO: Implement tag filtering
-        
+
         return {
             notes: files.map(file => ({
                 path: file.path,
@@ -356,11 +356,11 @@ export class ToolManager {
             if (param.required && !(param.name in params)) {
                 throw new Error(`Required parameter '${param.name}' is missing for tool '${tool.id}'`);
             }
-            
+
             if (param.name in params) {
                 const value = params[param.name];
                 const expectedType = param.type;
-                
+
                 if (expectedType === 'number' && typeof value !== 'number') {
                     throw new Error(`Parameter '${param.name}' must be a number`);
                 } else if (expectedType === 'boolean' && typeof value !== 'boolean') {
@@ -391,23 +391,23 @@ export class ToolManager {
     async addCustomTool(toolConfig: any): Promise<void> {
         const customTools = this.plugin.settings.customTools || [];
         const existingIndex = customTools.findIndex(t => t.id === toolConfig.id);
-        
+
         if (existingIndex >= 0) {
             customTools[existingIndex] = toolConfig;
         } else {
             customTools.push(toolConfig);
         }
-        
+
         this.plugin.settings.customTools = customTools;
         await this.plugin.saveData(this.plugin.settings);
-        
+
         // Reload tools
         this.loadCustomTools();
     }
 
     async removeCustomTool(toolId: string): Promise<void> {
         this.tools.delete(toolId);
-        this.plugin.settings.customTools = 
+        this.plugin.settings.customTools =
             (this.plugin.settings.customTools || []).filter(t => t.id !== toolId);
         await this.plugin.saveData(this.plugin.settings);
     }

@@ -144,14 +144,14 @@ export class PromptGenerator {
                 basePrompt = await this.generatePrompt('summarize', { content: userInput });
                 break;
             case 'explain':
-                basePrompt = await this.generatePrompt('explain', { 
-                    concept: userInput, 
+                basePrompt = await this.generatePrompt('explain', {
+                    concept: userInput,
                     audience: 'general audience',
                     context: ''
                 });
                 break;
             case 'analyze':
-                basePrompt = await this.generatePrompt('analyze', { 
+                basePrompt = await this.generatePrompt('analyze', {
                     information: userInput,
                     focus: 'key insights and patterns'
                 });
@@ -184,26 +184,26 @@ export class PromptGenerator {
 
     async addCustomTemplate(template: PromptTemplate): Promise<void> {
         this.promptTemplates.set(template.id, template);
-        
+
         // Save to settings
         const customTemplates = this.plugin.settings.customPromptTemplates || [];
         const existingIndex = customTemplates.findIndex(t => t.id === template.id);
-        
+
         if (existingIndex >= 0) {
             customTemplates[existingIndex] = template;
         } else {
             customTemplates.push(template);
         }
-        
+
         this.plugin.settings.customPromptTemplates = customTemplates;
         await this.plugin.saveData(this.plugin.settings);
     }
 
     async removeCustomTemplate(templateId: string): Promise<void> {
         this.promptTemplates.delete(templateId);
-        
+
         // Remove from settings
-        this.plugin.settings.customPromptTemplates = 
+        this.plugin.settings.customPromptTemplates =
             (this.plugin.settings.customPromptTemplates || []).filter(t => t.id !== templateId);
         await this.plugin.saveData(this.plugin.settings);
     }
@@ -211,7 +211,7 @@ export class PromptGenerator {
     // Generate prompt variations for A/B testing
     generatePromptVariations(basePrompt: string, count: number = 3): string[] {
         const variations = [basePrompt];
-        
+
         // Add different styles and approaches
         const styles = [
             'Please provide a detailed and comprehensive response to: ',

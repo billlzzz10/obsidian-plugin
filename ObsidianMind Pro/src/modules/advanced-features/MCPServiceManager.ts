@@ -22,13 +22,13 @@ export class MCPServiceManager {
 
             const service = new MCPService(config);
             const success = await service.start();
-            
+
             if (success) {
                 this.activeServices.set(config.name, service);
                 console.log(`MCP Service ${config.name} started successfully`);
                 return true;
             }
-            
+
             return false;
         } catch (error) {
             console.error(`Failed to start MCP Service ${config.name}:`, error);
@@ -49,7 +49,7 @@ export class MCPServiceManager {
                 this.activeServices.delete(serviceName);
                 console.log(`MCP Service ${serviceName} stopped successfully`);
             }
-            
+
             return success;
         } catch (error) {
             console.error(`Failed to stop MCP Service ${serviceName}:`, error);
@@ -85,11 +85,11 @@ export class MCPServiceManager {
 
     getAllServiceStatuses(): Record<string, 'running' | 'stopped' | 'error'> {
         const statuses: Record<string, 'running' | 'stopped' | 'error'> = {};
-        
+
         for (const [name, service] of this.activeServices) {
             statuses[name] = service.getStatus();
         }
-        
+
         return statuses;
     }
 }
@@ -129,7 +129,7 @@ class MCPService {
             // ใน Obsidian Plugin, เราไม่สามารถ spawn child process ได้โดยตรง
             // ต้องใช้วิธีอื่น เช่น Web Worker หรือ iframe
             console.log(`Starting stdio service: ${this.config.command} ${this.config.args.join(' ')}`);
-            
+
             // สำหรับตอนนี้ให้ mock การทำงาน
             this.status = 'running';
             return true;
@@ -178,12 +178,12 @@ class MCPService {
                 // Stop child process if any
                 this.process = null;
             }
-            
+
             if (this.connection) {
                 // Close connection if any
                 this.connection = null;
             }
-            
+
             this.status = 'stopped';
             return true;
         } catch (error) {

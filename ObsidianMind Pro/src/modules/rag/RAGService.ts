@@ -26,7 +26,7 @@ export class RAGService {
         if (this.isInitialized) return;
 
         this.isInitialized = true;
-        console.log("RAGService initialized");
+        console.log('RAGService initialized');
     }
 
     async performRAG(query: string, options?: Partial<RAGQuery>): Promise<RAGResult> {
@@ -77,7 +77,7 @@ export class RAGService {
         for (let i = 0; i < sources.length; i++) {
             const source = sources[i];
             const sourceText = this.formatSourceForContext(source, i + 1);
-            
+
             // Check if adding this source would exceed the context window
             if (currentLength + sourceText.length > contextWindow) {
                 // If this is the first source and it's too long, truncate it
@@ -101,7 +101,7 @@ export class RAGService {
     }
 
     async getRelevantSources(
-        query: string, 
+        query: string,
         maxResults: number = 5,
         sourceTypes?: ('obsidian' | 'notion' | 'airtable')[]
     ): Promise<RetrievedSource[]> {
@@ -118,11 +118,11 @@ export class RAGService {
 
     async getContextForPrompt(query: string, maxContextLength?: number): Promise<string> {
         const ragResult = await this.performRAG(query);
-        
+
         if (maxContextLength && ragResult.context.length > maxContextLength) {
             return ragResult.context.substring(0, maxContextLength - 3) + '...';
         }
-        
+
         return ragResult.context;
     }
 
@@ -154,23 +154,23 @@ export class RAGService {
     // Helper method to create a prompt with RAG context
     async createRAGPrompt(userQuery: string, systemPrompt?: string): Promise<string> {
         const ragResult = await this.performRAG(userQuery);
-        
+
         let prompt = '';
-        
+
         if (systemPrompt) {
             prompt += `${systemPrompt}\n\n`;
         }
-        
+
         if (ragResult.context) {
             prompt += `Context from your knowledge base:\n${ragResult.context}\n\n`;
         }
-        
+
         prompt += `User question: ${userQuery}`;
-        
+
         if (ragResult.sources.length > 0) {
             prompt += `\n\nPlease answer based on the provided context. If the context doesn't contain enough information to answer the question, please say so.`;
         }
-        
+
         return prompt;
     }
 

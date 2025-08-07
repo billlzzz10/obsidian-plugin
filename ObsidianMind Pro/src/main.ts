@@ -1,4 +1,4 @@
-import "./global.d.ts";
+import './global.d.ts';
 import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { AIPluginSettings, DEFAULT_SETTINGS } from './settings';
 import { AIPluginSettingTab } from './ui/SettingsTab';
@@ -25,7 +25,7 @@ export default class AIPlugin extends Plugin {
 
     async onload() {
         console.log('Loading Obsidian AI Plugin...');
-        
+
         await this.loadSettings();
 
         // Initialize managers and services
@@ -55,7 +55,7 @@ export default class AIPlugin extends Plugin {
             (leaf) => new ChatView(leaf, this)
         );
 
-        this.addRibbonIcon("bot", "Open AI Chat", () => {
+        this.addRibbonIcon('bot', 'Open AI Chat', () => {
             this.activateView();
         });
 
@@ -90,7 +90,7 @@ export default class AIPlugin extends Plugin {
 
     async onunload() {
         console.log('Unloading Obsidian AI Plugin...');
-        
+
         this.app.workspace.detachLeavesOfType(VIEW_TYPE_CHAT);
 
         await this.advancedFeaturesManager.cleanup();

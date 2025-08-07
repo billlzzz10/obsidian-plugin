@@ -45,7 +45,7 @@ export class VectorStore {
     async removeEmbeddingsBySourceId(sourceId: string): Promise<void> {
         const initialLength = this.vectors.length;
         this.vectors = this.vectors.filter(v => v.metadata.sourceId !== sourceId);
-        
+
         if (this.vectors.length !== initialLength) {
             await this.saveVectors();
             console.log(`Removed ${initialLength - this.vectors.length} embeddings for source: ${sourceId}`);
@@ -66,7 +66,7 @@ export class VectorStore {
         // Get query embedding (this should be done by the caller)
         // For now, we'll assume the query contains the embedding vector
         // In practice, this would be handled by the RAGService
-        
+
         const results: Array<{ source: RetrievedSource; similarity: number }> = [];
 
         for (const vector of this.vectors) {
@@ -177,7 +177,7 @@ export class VectorStore {
         try {
             const data = await this.plugin.loadData();
             const vectorData = data?.[VECTOR_STORE_NAME] as VectorStoreData;
-            
+
             if (vectorData && vectorData.vectors) {
                 this.vectors = vectorData.vectors;
                 console.log(`Loaded ${this.vectors.length} vectors from storage`);
@@ -194,16 +194,16 @@ export class VectorStore {
     private async saveVectors(): Promise<void> {
         try {
             const data = await this.plugin.loadData() || {};
-            
+
             const vectorData: VectorStoreData = {
                 vectors: this.vectors,
                 version: '1.0.0',
                 lastUpdated: new Date()
             };
-            
+
             data[VECTOR_STORE_NAME] = vectorData;
             await this.plugin.saveData(data);
-            
+
             console.log(`Saved ${this.vectors.length} vectors to storage`);
         } catch (error) {
             console.error('Failed to save vectors:', error);

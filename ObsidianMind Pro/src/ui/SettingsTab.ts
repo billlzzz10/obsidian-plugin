@@ -27,12 +27,12 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 Object.keys(SUPPORTED_MODELS.OPENAI).forEach(model => {
                     dropdown.addOption(model, `OpenAI: ${model}`);
                 });
-                
+
                 // Add Anthropic models
                 Object.keys(SUPPORTED_MODELS.ANTHROPIC).forEach(model => {
                     dropdown.addOption(model, `Anthropic: ${model}`);
                 });
-                
+
                 // Add Google models
                 Object.keys(SUPPORTED_MODELS.GOOGLE).forEach(model => {
                     dropdown.addOption(model, `Google: ${model}`);
