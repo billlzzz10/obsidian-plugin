@@ -1,26 +1,5 @@
 import { TFile } from "obsidian";
-
-export interface AIPluginSettings {
-    openaiApiKey: string;
-    anthropicApiKey: string;
-    googleApiKey: string;
-    selectedModel: string;
-    embeddingModel: string;
-    chunkSize: number;
-    chunkOverlap: number;
-    maxRetrievedChunks: number;
-    similarityThreshold: number;
-    notionIntegrationToken: string;
-    notionDatabaseIds: string[];
-    airtableApiKey: string;
-    airtableBaseIds: string[];
-    autoSync: boolean;
-    syncInterval: number;
-    customPromptTemplates: PromptTemplate[];
-    customMacroCommands: MacroCommand[];
-    customTools: any[];
-    contextWindowSize: number;
-}
+import { AIPluginSettings } from "../../settings";
 
 export interface ObsidianNote {
     path: string;

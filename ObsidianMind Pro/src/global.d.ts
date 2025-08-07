@@ -5,7 +5,7 @@ import { ChatService } from "./modules/chat/ChatService";
 import { DataIngestionManager } from "./modules/data-ingestion/DataIngestionManager";
 import { AIModelManager } from "./modules/ai-models/AIModelManager";
 import { AdvancedFeaturesManager } from "./modules/advanced-features/AdvancedFeaturesManager";
-import { AISetting } from "./settings";
+import { AIPluginSettings } from "./settings";
 
 declare module "obsidian" {
     interface App {
@@ -23,7 +23,7 @@ declare module "obsidian" {
         dataIngestionManager: DataIngestionManager;
         aiModelManager: AIModelManager;
         advancedFeaturesManager: AdvancedFeaturesManager;
-        settings: AISetting;
+        settings: AIPluginSettings;
         saveSettings: () => Promise<void>;
     }
 }

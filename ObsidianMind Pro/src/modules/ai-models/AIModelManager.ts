@@ -68,13 +68,6 @@ export class AIModelManager {
                 supportsFunctionCalling: config.supportsFunctionCalling
             });
         }
-                provider: 'google',
-                apiEndpoint: 'https://generativelanguage.googleapis.com/v1/models',
-                maxTokens: config.maxTokens,
-                supportsStreaming: config.supportsStreaming,
-                supportsFunctionCalling: config.supportsFunctionCalling
-            });
-        }
     }
 
     private loadCustomModels() {

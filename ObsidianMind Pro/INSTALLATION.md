@@ -1,53 +1,71 @@
-# Installation Guide for Obsidian AI Plugin
+# ObsidianMind Pro - Complete Installation Guide
 
-## Prerequisites
+## 🎯 **ภาพรวม**
 
-Before installing the Obsidian AI Plugin, ensure you have:
+ObsidianMind Pro เป็น AI Plugin ขั้นสูงสำหรับ Obsidian ที่รวม RAG, Embedding, Multi-AI Models, และ External Integrations ไว้ในที่เดียว
 
-1. **Obsidian** installed on your device (desktop or mobile)
-2. **API Keys** for at least one AI provider:
-   - OpenAI API Key (for GPT models)
-   - Anthropic API Key (for Claude models)
-   - Google AI API Key (for Gemini models)
-3. **Optional**: Notion Integration Token and Airtable API Key for external data integration
+## 📋 **ความต้องการระบบ**
 
-## Installation Methods
+### **พื้นฐาน:**
+- **Obsidian** v0.15.0 หรือสูงกว่า
+- **Node.js** v16+ (สำหรับ MCP services)
+- **Internet Connection** (สำหรับ AI services)
 
-### Method 1: Manual Installation (Recommended)
+### **API Keys (อย่างน้อย 1 ตัว):**
+- 🤖 **OpenAI API Key** (GPT models)
+- 🧠 **Anthropic API Key** (Claude models)  
+- 🔍 **Google AI API Key** (Gemini models)
+- 🔵 **Azure Translator Key** (Translation services)
 
-1. **Download the Plugin**
-   - Download the latest release from the [GitHub releases page](https://github.com/your-username/obsidian-ai-plugin/releases)
-   - Extract the ZIP file to get the `obsidian-ai-plugin` folder
+### **Optional Services:**
+- 📝 **Notion Integration Token**
+- 📊 **Airtable API Key**
+- ⚡ **Zapier API Key**
+- 🎨 **Figma Access Token**
 
-2. **Install in Obsidian**
-   - Open your Obsidian vault
-   - Navigate to your vault's `.obsidian/plugins` directory
-     - On Windows: `[Vault Path]\.obsidian\plugins`
-     - On macOS: `[Vault Path]/.obsidian/plugins`
-     - On Linux: `[Vault Path]/.obsidian/plugins`
-   - If the `plugins` folder doesn't exist, create it
-   - Copy the `obsidian-ai-plugin` folder into the `plugins` directory
+## 🚀 **วิธีติดตั้ง**
 
-3. **Enable the Plugin**
-   - Open Obsidian
-   - Go to Settings (⚙️) → Community plugins
-   - Find "Obsidian AI Plugin" in the installed plugins list
-   - Toggle it ON
+### **Method 1: Manual Installation (แนะนำ)**
 
-### Method 2: Development Installation
+#### **ขั้นตอนที่ 1: ดาวน์โหลด Plugin**
+1. ไปที่ [GitHub Releases](https://github.com/billlzzz10/obsidian-plugin/releases)
+2. ดาวน์โหลดไฟล์ `.zip` เวอร์ชันล่าสุด
+3. แตกไฟล์ได้โฟลเดอร์ `ObsidianMind Pro`
 
-If you want to build from source:
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-username/obsidian-ai-plugin.git
-   cd obsidian-ai-plugin
+#### **ขั้นตอนที่ 2: ติดตั้งใน Obsidian**
+1. เปิด Obsidian vault
+2. ไปที่โฟลเดอร์ `.obsidian/plugins`:
    ```
-
-2. **Install Dependencies**
-   ```bash
-   npm install
+   Windows: [Vault Path]\.obsidian\plugins
+   macOS:   [Vault Path]/.obsidian/plugins
+   Linux:   [Vault Path]/.obsidian/plugins
    ```
+3. หากไม่มีโฟลเดอร์ `plugins` ให้สร้างขึ้นมา
+4. คัดลอกโฟลเดอร์ `ObsidianMind Pro` เข้าไป
+
+#### **ขั้นตอนที่ 3: เปิดใช้งาน Plugin**
+1. เปิด Obsidian Settings (⚙️)
+2. ไปที่ **Community plugins**
+3. หา **"ObsidianMind Pro"** ในรายการ
+4. **เปิดใช้งาน** (Toggle ON)
+
+### **Method 2: Development Installation**
+
+#### **สำหรับ Developers:**
+```bash
+# Clone repository
+git clone https://github.com/billlzzz10/obsidian-plugin.git
+cd obsidian-plugin/ObsidianMind Pro
+
+# Install dependencies
+npm install
+
+# Build plugin
+npm run build
+
+# Copy to Obsidian plugins folder
+cp -r . "[Vault Path]/.obsidian/plugins/ObsidianMind Pro"
+```
 
 3. **Build the Plugin**
    ```bash

@@ -139,6 +139,10 @@ export class DataIngestionManager {
         return this.airtableAPI.fetchRecords();
     }
 
+    /**
+     * Extracts tags from frontmatter only.
+     * Inline tags are not supported in this method.
+     */
     private getTagsFromFile(file: TFile, frontmatter: Record<string, any>): string[] {
         const tags: string[] = [];
         // Tags from frontmatter
@@ -149,9 +153,7 @@ export class DataIngestionManager {
                 tags.push(...frontmatter.tags.split(',').map((tag: string) => tag.trim().replace(/^#/, '')));
             }
         }
-        // Inline tags (basic regex, might need more robust parsing)
-        const inlineTags = file.content?.match(/#\w+/g) || [];
-        tags.push(...inlineTags.map((tag: string) => tag.replace(/^#/, '')));
+        // Only frontmatter tags are supported.
         return Array.from(new Set(tags)); // Remove duplicates
     }
 

@@ -94,7 +94,6 @@ export class VectorStore {
             if (similarity >= (query.similarityThreshold || DEFAULT_SIMILARITY_THRESHOLD)) {
                 results.push({
                     source: {
-                        id: vector.id,
                         title: vector.metadata.title,
                         content: vector.content,
                         similarity: similarity,
@@ -139,13 +138,12 @@ export class VectorStore {
                 if (shouldSkip) continue;
             }
 
-            // Calculate similarity (placeholder - actual similarity calculation should be implemented)
-            const similarity = 0; // TODO: Implement cosine similarity or use a valid function
+            // Calculate similarity using cosine similarity
+            const similarity = cosineSimilarity(queryVector, vector.vector);
 
             if (similarity >= (query.similarityThreshold || DEFAULT_SIMILARITY_THRESHOLD)) {
                 results.push({
                     source: {
-                        id: vector.id,
                         title: vector.metadata.title,
                         content: vector.content,
                         similarity: similarity,
@@ -220,3 +218,18 @@ export class VectorStore {
     }
 }
 
+// Helper function for cosine similarity
+function cosineSimilarity(a: number[], b: number[]): number {
+    if (a.length !== b.length) {
+        throw new Error('Vectors must be of the same length for cosine similarity calculation.');
+    }
+    let dot = 0, normA = 0, normB = 0;
+    for (let i = 0; i < a.length; i++) {
+        dot += a[i] * b[i];
+        normA += a[i] * a[i];
+        normB += b[i] * b[i];
+    }
+    if (normA === 0 || normB === 0) return 0;
+    return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+}
