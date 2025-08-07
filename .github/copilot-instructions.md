@@ -1,68 +1,164 @@
-# ObsidianMind Pro – คู่มือสำหรับ AI Coding Agent (ภาษาไทย)
+# ObsidianMind Pro – AI Coding Agent Guide
 
-## สถาปัตยกรรมโปรเจค & แนวคิดสำคัญ
-- **ปลั๊กอิน AI แบบโมดูลาร์สำหรับ Obsidian**: โค้ดนี้คือปลั๊กอิน TypeScript/React สำหรับ Obsidian รองรับ LLM chat, RAG (Retrieval-Augmented Generation), embedding ในเครื่อง, และเชื่อมต่อหลายแหล่งข้อมูล (Notion, Airtable, Zapier, Figma, Azure)
-- **องค์ประกอบหลัก**:
-  - main.ts: จุดเริ่มต้นของปลั๊กอิน, สร้างและเชื่อมต่อ service/manager ทุกตัว
-  - AIModelManager.ts: จัดการเลือก LLM และ route API (OpenAI, Anthropic, Google, Azure)
-  - EmbeddingManager.ts & VectorStore.ts: จัดการเวกเตอร์และค้นหา context สำหรับ RAG
-  - src/modules/data-ingestion/NotionAPI.ts, AirtableAPI.ts: ดึงข้อมูลภายนอก
-  - src/modules/advanced-features/MCPServiceManager.ts: จัดการ MCP services (Notion, Zapier, Figma)
-  - src/ui/: React UI (chat, settings ฯลฯ)
-- **Data Flow**: รับข้อความ → ChatService → (RAGService + AIModelManager) → LLM API → ตอบกลับ (อาจมี context จาก embedding/แหล่งข้อมูล)
-- **การตั้งค่า**: ทุกอย่างอยู่ใน settings.ts (API key, เลือกโมเดล, MCP services ฯลฯ)
+## Project Architecture & Key Concepts
+- **Modular AI Plugin for Obsidian**: TypeScript/React plugin for Obsidian with LLM chat, RAG (Retrieval-Augmented Generation), local embedding, and multi-source integration (Notion, Airtable, Zapier, Figma, Azure).
+- **Core Components**:
+  - `main.ts`: Entry point, initializes and connects all services/managers
+  - `AIModelManager.ts`: Manages LLM selection and API routing (OpenAI, Anthropic, Google, Azure)
+  - `EmbeddingManager.ts` & `VectorStore.ts`: Manage vectors and context retrieval for RAG
+  - `src/modules/data-ingestion/NotionAPI.ts`, `AirtableAPI.ts`: External data fetching
+  - `src/modules/advanced-features/MCPServiceManager.ts`: Model Context Protocol services
+  - `src/ui/`: React UI components (chat, settings, etc.)
+- **Data Flow**: Input → ChatService → (RAGService + AIModelManager) → LLM API → Response (with context from embedding/data sources)
+- **Configuration**: All in `settings.ts` (API keys, model selection, MCP services, etc.)
 
-## Dependencies & การจัดการปัญหาที่พบบ่อย
-- **เวอร์ชั่นสำคัญ**: Node.js v18-20, React 18, TypeScript 5.9, ES2020 target (สำคัญมาก!)
-- **Dependencies หลัก**:
-  - @xenova/transformers: สำหรับ embedding บนเครื่อง (ต้องการ ES2020+ เพราะใช้ BigInt literals)
-  - onnxruntime-web: รันโมเดล ML บนเบราว์เซอร์
-  - react/react-dom: UI components
-  - zustand: จัดการ state
+## Dependencies & Common Issues
+- **Critical Versions**: Node.js v18-20, React 18, TypeScript 5.9, ES2020 target (critical!)
+- **Key Dependencies**:
+  - `@xenova/transformers`: Local embedding (requires ES2020+ for BigInt literals)
+  - `onnxruntime-web`: ML model execution in browser
+  - `react/react-dom`: UI components
+  - `zustand`: State management
 
-- **ปัญหาที่พบบ่อย**:
-  - BigInt literals: ต้องตั้ง target เป็น ES2020 ทั้งใน tsconfig.json และ esbuild.config.mjs
-  - React 18/19 conflicts: ต้องใช้เวอร์ชั่นตรงกัน
-  - Node.js compatibility: แนะนำใช้ v18-20 ตาม CI config
+- **Common Issues**:
+  - BigInt literals: Set target to ES2020 in both tsconfig.json and esbuild.config.mjs
+  - React 18/19 conflicts: Use consistent versions
+  - TypeScript/ESLint conflicts: Current TypeScript (5.9.2) has warnings with ESLint
 
-- **แก้ไขปัญหา Dependencies**:
-  - ใช้ `npm ci` แทน `npm install` เพื่อติดตั้งตรงตาม package-lock.json
-  - เช็ค CI workflow ใน `.github/workflows/ci.yml` สำหรับขั้นตอนการติดตั้งที่ถูกต้อง
-  - Dependabot จัดการอัพเดต dependencies โดยอัตโนมัติทุกสัปดาห์
+- **Dependency Resolution**:
+  - Use `npm ci` instead of `npm install` to match package-lock.json exactly
+  - Check CI workflow in `.github/workflows/ci.yml` for proper installation steps
+  - Dependabot manages dependency updates automatically every week
 
-## เวิร์กโฟลว์สำหรับนักพัฒนา
-- **Build**: ใช้ `npm run build` (TypeScript + esbuild, ได้ main.js) / dev ใช้ `npm run dev`
-- **Test**: ใช้ `npm test` (Jest) ไฟล์ทดสอบอยู่ใน test/ และ tests/
+## Developer Workflow
+- **Build**: `npm run build` (TypeScript + esbuild, outputs main.js) / `npm run dev` for development
+- **Test**: `npm test` (Jest) with test files in test/ and tests/
 - **Lint/Format**: `npm run lint`, `npm run format`
-- **ติดตั้งปลั๊กอิน**: copy โฟลเดอร์ build ไปที่ `.obsidian/plugins/ObsidianMind Pro` ใน vault
+- **Plugin Installation**: Copy build folder to `.obsidian/plugins/ObsidianMind Pro` in vault
 - **External Services**:
-  - Notion: ต้องใช้ integration token และ database ID
-  - Azure: ต้องใช้ Translator API key, endpoint, region
-  - Zapier/Figma: ตั้งค่าผ่าน MCP services ใน settings
+  - Notion: Requires integration token and database ID
+  - Azure: Requires API keys, endpoint, region for various services
+  - Zapier/Figma: Configure through MCP services in settings
 
-## รูปแบบ/แนวปฏิบัติเฉพาะโปรเจค
-- **Service Manager**: ทุกฟีเจอร์หลัก (embedding, RAG, chat, integration) แยกเป็นคลาส manager/service และสร้างใน main.ts
-- **Settings Pattern**: ตัวเลือกทั้งหมดอยู่ใน interface `AIPluginSettings` และต้องอัปเดต `DEFAULT_SETTINGS` ทุกครั้งที่เพิ่ม option
-- **MCP Services**: เพิ่ม integration ใหม่โดยขยาย MCPServiceManager และอัปเดต settings.ts (`mcpServices`)
-- **Embedding**: ทุกเวกเตอร์ต้องผ่าน EmbeddingManager/VectorStore เท่านั้น
-- **UI**: ทุกฟีเจอร์ที่ user เห็นเป็น React component ใน src/ui/
-- **Testing**: ใช้ Jest, วางไฟล์ใน test/ หรือ tests/
-- **Security**: ห้าม hardcode API key, ใช้ env variable หรือ plugin settings เท่านั้น
+## Project-Specific Patterns
+- **Service Manager Pattern**: Each major feature (embedding, RAG, chat, integration) is a separate manager/service class instantiated in main.ts
+- **Settings Pattern**: All options are in `AIPluginSettings` interface, must update `DEFAULT_SETTINGS` when adding options
+- **MCP Services**: Add new integrations by extending MCPServiceManager and updating settings.ts (`mcpServices`)
+- **Embedding**: All vectors must go through EmbeddingManager/VectorStore only
+- **UI Components**: All user-visible features are React components in src/ui/
+- **Testing**: Jest for testing, place files in test/ or tests/
+- **Security**: Never hardcode API keys, use environment variables or plugin settings only
+- **Error Handling**: Use try/catch with detailed logging for all API calls and async operations
 
-## การเชื่อมต่อข้ามโมดูล
-- **LLM API**: เรียกผ่าน AIModelManager เท่านั้น
-- **RAG**: ใช้ RAGService ดึง context (ประสานกับ EmbeddingManager/VectorStore)
-- **External Data**: ใช้ DataIngestionManager ดึงข้อมูล Notion/Airtable (UI ห้าม fetch ตรง)
-- **MCP**: ทุก service MCP ต้องผ่าน MCPServiceManager
+## Testing Strategy
+- **Unit Testing Structure**:
+  - Use Jest with ts-jest for TypeScript support
+  - Place test files in `test/` directory with `.test.ts` suffix
+  - Test each service/manager class in isolation
+  - Example: `test/EmbeddingManager.test.ts` should test only EmbeddingManager functionality
 
-## ตัวอย่าง
-- **เพิ่ม LLM ใหม่**: อัปเดต SUPPORTED_MODELS ใน constants.ts, ขยาย AIModelManager, เพิ่ม config ใน settings.ts
-- **เพิ่ม MCP service ใหม่**: ขยาย MCPServiceManager, เพิ่ม config ใน settings.ts, เขียนคู่มือใน MCP_SERVICES_GUIDE.md
-- **เพิ่ม UI ใหม่**: สร้าง React component ใน src/ui/, register ใน main.ts ถ้าจำเป็น
+- **Mocking Approach**:
+  - Create mock implementations in `test/mocks/` directory
+  - Use Jest's `jest.mock()` to mock dependencies
+  - Example mock for Obsidian API:
+  ```typescript
+  // test/mocks/obsidian.ts
+  export const mockApp = {
+    vault: {
+      getMarkdownFiles: jest.fn().mockReturnValue([]),
+      read: jest.fn().mockResolvedValue('Mock content'),
+      create: jest.fn().mockResolvedValue(undefined)
+    },
+    workspace: {
+      getActiveFile: jest.fn().mockReturnValue(null)
+    }
+  };
+  
+  // In test file:
+  jest.mock('obsidian', () => ({
+    Plugin: class MockPlugin {},
+    // Include other Obsidian exports as needed
+  }));
+  ```
 
-## อ้างอิง
-- ดู README.md, INSTALLATION.md, MCP_SERVICES_GUIDE.md, AZURE_INTEGRATION_GUIDE.md สำหรับวิธีใช้/ตั้งค่า/เชื่อมต่อ
-- คำสั่ง build/test/lint ดูใน package.json
+- **Testing External APIs**:
+  - Use `jest-fetch-mock` for API calls
+  - Create sample responses in `test/fixtures/` directory
+  - Never test against real API endpoints in automated tests
+
+- **Integration Testing**:
+  - Test communication between related services (e.g., RAGService + EmbeddingManager)
+  - Create a test plugin instance with minimal dependencies
+  - Use realistic but controlled test data
+
+## Dependency Management
+- **TypeScript and ESLint Compatibility**:
+  - Current TypeScript version (5.9.2) generates warnings with ESLint
+  - Solution: Add `/* eslint-disable @typescript-eslint/rule-name */` comments for specific issues
+  - Long-term: Wait for ESLint plugin to support TypeScript 5.9 officially
+  
+- **Optimizing Bundle Size**:
+  - Use tree-shaking: Import only what's needed (`import { xyz } from 'package'` instead of `import * as package`)
+  - Consider code splitting for large dependencies like `@xenova/transformers`
+  - Use `esbuild` production settings (minification, dead code elimination)
+  
+- **Dependency Audit**:
+  - Regularly run `npm audit` to check for vulnerabilities
+  - Consider alternatives for large dependencies
+  - Example replacements:
+    - Full lodash → individual lodash functions or native JS
+    - Large visualization libraries → lightweight alternatives
+
+- **Version Pinning**:
+  - Pin dependencies to exact versions in package.json
+  - Update dependencies deliberately using `npm update --depth=1`
+  - Use package-lock.json for deterministic builds
+
+## Cross-Module Communication
+- **LLM API**: Call only through AIModelManager
+- **RAG**: Use RAGService to retrieve context (coordinates with EmbeddingManager/VectorStore)
+- **External Data**: Use DataIngestionManager to fetch Notion/Airtable data (UI should never fetch directly)
+- **MCP Services**: All MCP services must go through MCPServiceManager
+
+## Code Examples
+- **Adding a new LLM provider**:
+```typescript
+// 1. Update SUPPORTED_MODELS in constants.ts
+export const SUPPORTED_MODELS = {
+  // existing providers...
+  NEW_PROVIDER: {
+    'model-id': { maxTokens: 4096, supportsStreaming: true, supportsFunctionCalling: false }
+  }
+};
+
+// 2. Add provider handling in AIModelManager.ts
+private loadSupportedModels() {
+  // existing providers...
+  
+  // Load New Provider models
+  for (const [id, config] of Object.entries(SUPPORTED_MODELS.NEW_PROVIDER)) {
+    this.availableModels.set(id, {
+      id: id,
+      name: `NewProvider: ${id}`,
+      provider: 'new-provider',
+      apiEndpoint: 'https://api.newprovider.com/v1/chat',
+      maxTokens: config.maxTokens,
+      supportsStreaming: config.supportsStreaming,
+      supportsFunctionCalling: config.supportsFunctionCalling
+    });
+  }
+}
+
+// 3. Add settings in settings.ts
+export interface AIPluginSettings {
+  // existing settings...
+  newProviderApiKey: string;
+}
+```
+
+## References
+- README.md, INSTALLATION.md, MCP_SERVICES_GUIDE.md, AZURE_INTEGRATION_GUIDE.md for usage/setup/connection docs
+- See package.json for build/test/lint commands
 
 ---
 ## Codacy Rules (Preserved)

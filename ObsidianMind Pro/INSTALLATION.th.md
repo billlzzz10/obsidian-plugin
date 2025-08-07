@@ -109,6 +109,40 @@
    - วางโทเค็น
    - เพิ่มรหัสพื้นฐาน (พบใน URL พื้นฐาน)
 
+#### การตั้งค่า Azure AI Services
+1. **Azure OpenAI Service**:
+   - สร้างทรัพยากร Azure OpenAI ใน [Azure Portal](https://portal.azure.com)
+   - ติดตั้งโมเดล AI ใน Azure OpenAI Studio
+   - ในการตั้งค่าปลั๊กอิน ป้อน:
+     - Azure OpenAI API Key
+     - Azure OpenAI Endpoint
+     - Azure OpenAI Deployment ID (ชื่อของโมเดลที่ติดตั้ง)
+     - Azure OpenAI API Version
+
+2. **Azure AI Search**:
+   - สร้างทรัพยากร Azure AI Search
+   - สร้าง index และตั้งค่า vector fields
+   - ในการตั้งค่าปลั๊กอิน ป้อน:
+     - Azure AI Search Admin Key
+     - Azure AI Search Service Endpoint
+     - Azure AI Search Index Name
+
+3. **Azure Cosmos DB**:
+   - สร้าง Azure Cosmos DB account
+   - สร้าง database และ containers
+   - ในการตั้งค่าปลั๊กอิน ป้อน:
+     - Azure Cosmos DB Connection String
+     - Database ID
+     - Container Names
+
+4. **Azure AI Projects Agent**:
+   - ตั้งค่าบริการ Azure AI Projects
+   - ในการตั้งค่าปลั๊กอิน ป้อน:
+     - Azure AI Projects API Key
+     - Agent Configuration IDs
+
+สำหรับข้อมูลเพิ่มเติมเกี่ยวกับการตั้งค่าบริการ Azure โปรดดู [AZURE_INTEGRATION_GUIDE.th.md](AZURE_INTEGRATION_GUIDE.th.md)
+
 ### 5. การประมวลผลข้อมูลเบื้องต้น
 
 1. **ซิงค์ข้อมูลภายนอก** (หากกําหนดค่าไว้):

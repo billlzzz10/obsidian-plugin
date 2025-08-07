@@ -9,6 +9,7 @@ This is a powerful AI plugin for Obsidian that brings the capabilities of large 
 - **On-device Embedding:** Embeddings are generated and stored locally on your device for privacy and offline access.
 - **Multi-source Integration:** Connect to Notion databases and Airtable bases to include them in your knowledge base.
 - **Multi-model Support:** Choose from a variety of large language models from OpenAI, Anthropic, and Google.
+- **Azure AI Services Integration:** Connect to comprehensive Azure AI services including Azure OpenAI, Azure AI Search, Azure Agent, and Azure Cosmos DB.
 - **Customizable Prompts:** Create and use your own prompt templates for consistent and repeatable results.
 - **Macro Commands:** Automate complex workflows by chaining together multiple commands and AI actions.
 - **Custom Tools:** Extend the plugin's functionality by adding your own tools via JSON.
