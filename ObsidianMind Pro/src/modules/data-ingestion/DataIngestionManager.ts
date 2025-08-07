@@ -2,7 +2,7 @@ import { Plugin, TFile } from 'obsidian';
 import { NotionAPI } from './NotionAPI';
 import { AirtableAPI } from './AirtableAPI';
 import { EmbeddingManager } from '../embedding/EmbeddingManager';
-import { ObsidianNote, NotionPage, AirtableRecord } from '../utils/types';
+import { ObsidianNote, NotionPage, AirtableRecord, SyncStatus } from '../utils/types';
 // import { extractFrontmatter } from '../utils/helpers';
 
 // Simple frontmatter extractor (YAML frontmatter)
@@ -30,10 +30,10 @@ function extractFrontmatter(content: string): { frontmatter: Record<string, any>
 import { MIN_SYNC_INTERVAL, MAX_SYNC_INTERVAL } from '../utils/constants';
 
 export class DataIngestionManager {
-    private plugin: Plugin;
-    private notionAPI: NotionAPI;
-    private airtableAPI: AirtableAPI;
-    private embeddingManager: EmbeddingManager; // To trigger embedding rebuild
+    private plugin!: Plugin;
+    private notionAPI!: NotionAPI;
+    private airtableAPI!: AirtableAPI;
+    private embeddingManager!: EmbeddingManager; // To trigger embedding rebuild
     private syncIntervalId: number | null = null;
 
     constructor(plugin: Plugin) {
@@ -75,6 +75,8 @@ export class DataIngestionManager {
     private async syncNotionData(): Promise<void> {
         console.log('Syncing Notion data...');
         const status: SyncStatus = {
+            isRunning: true,
+            progress: 0,
             sourceType: 'notion',
             lastSync: new Date(),
             status: 'syncing',
@@ -94,6 +96,8 @@ export class DataIngestionManager {
     private async syncAirtableData(): Promise<void> {
         console.log('Syncing Airtable data...');
         const status: SyncStatus = {
+            isRunning: true,
+            progress: 0,
             sourceType: 'airtable',
             lastSync: new Date(),
             status: 'syncing',

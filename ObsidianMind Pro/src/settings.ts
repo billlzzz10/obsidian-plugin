@@ -1,3 +1,5 @@
+import { PromptTemplate, MacroCommand, CustomTool } from "./modules/utils/types";
+
 export interface AIPluginSettings {
   // AI Model Settings
   selectedModel: string;
@@ -38,6 +40,9 @@ export interface AIPluginSettings {
   mcpEnabled: boolean;
   customToolsEnabled: boolean;
   customToolsConfig: string; // JSON string
+  customPromptTemplates: PromptTemplate[];
+  customMacroCommands: MacroCommand[];
+  customTools: CustomTool[];
 
   // MCP Services
   mcpServices: MCPServiceConfig[];
@@ -115,6 +120,9 @@ export const DEFAULT_SETTINGS: AIPluginSettings = {
 	mcpEnabled: false,
 	customToolsEnabled: false,
 	customToolsConfig: '[]',
+	customPromptTemplates: [],
+	customMacroCommands: [],
+	customTools: [],
 	
 	// MCP Services
 	mcpServices: [

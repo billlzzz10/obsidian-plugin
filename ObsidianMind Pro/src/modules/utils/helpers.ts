@@ -74,4 +74,48 @@ export function formatDuration(seconds: number): string {
     return `${minutes}m ${remainingSeconds}s`;
 }
 
+export async function retryWithBackoff<T>(
+    fn: () => Promise<T>,
+    maxRetries: number = 3,
+    baseDelay: number = 1000
+): Promise<T> {
+    let lastError: Error;
+    
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            return await fn();
+        } catch (error) {
+            lastError = error as Error;
+            
+            if (attempt === maxRetries) {
+                throw lastError;
+            }
+            
+            const delay = baseDelay * Math.pow(2, attempt);
+            await new Promise(resolve => setTimeout(resolve, delay));
+        }
+    }
+    
+    throw lastError!;
+}
+
+// Polyfill for AbortSignal.timeout if not available
+export function createTimeoutSignal(timeout: number): AbortSignal {
+    try {
+        // Try using the native AbortSignal.timeout if available
+        if (typeof (AbortSignal as any).timeout === 'function') {
+            return (AbortSignal as any).timeout(timeout);
+        }
+    } catch (e) {
+        // Fallback if not available
+    }
+    
+    // Fallback implementation
+    const controller = new AbortController();
+    setTimeout(() => {
+        controller.abort();
+    }, timeout);
+    return controller.signal;
+}
+
 

@@ -42,7 +42,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                     .setValue(this.plugin.settings.selectedModel)
                     .onChange(async (value) => {
                         this.plugin.settings.selectedModel = value;
-                        await this.plugin.saveSettings();
+                        await this.plugin.saveData(this.plugin.settings);
                     });
             });
 
@@ -54,7 +54,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.openaiApiKey)
                 .onChange(async (value) => {
                     this.plugin.settings.openaiApiKey = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -65,7 +65,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.anthropicApiKey)
                 .onChange(async (value) => {
                     this.plugin.settings.anthropicApiKey = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -76,7 +76,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.googleApiKey)
                 .onChange(async (value) => {
                     this.plugin.settings.googleApiKey = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         // Embedding Settings
@@ -94,7 +94,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                     .setValue(this.plugin.settings.embeddingModel)
                     .onChange(async (value) => {
                         this.plugin.settings.embeddingModel = value;
-                        await this.plugin.saveSettings();
+                        await this.plugin.saveData(this.plugin.settings);
                     });
             });
 
@@ -107,7 +107,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.chunkSize = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -119,7 +119,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.chunkOverlap = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         // RAG Settings
@@ -134,7 +134,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.maxRetrievedChunks = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -146,7 +146,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.similarityThreshold = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         // External Integration Settings
@@ -160,7 +160,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.notionIntegrationToken)
                 .onChange(async (value) => {
                     this.plugin.settings.notionIntegrationToken = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -171,7 +171,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.notionDatabaseIds.join(','))
                 .onChange(async (value) => {
                     this.plugin.settings.notionDatabaseIds = value.split(',').map(id => id.trim()).filter(id => id);
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -182,7 +182,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.airtableApiKey)
                 .onChange(async (value) => {
                     this.plugin.settings.airtableApiKey = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -193,7 +193,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.airtableBaseIds.join(','))
                 .onChange(async (value) => {
                     this.plugin.settings.airtableBaseIds = value.split(',').map(id => id.trim()).filter(id => id);
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -203,7 +203,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.autoSync)
                 .onChange(async (value) => {
                     this.plugin.settings.autoSync = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                     // Restart auto-sync with new setting
                     this.plugin.dataIngestionManager.startAutoSync();
                 }));
@@ -217,7 +217,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.syncInterval = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                     // Restart auto-sync with new interval
                     this.plugin.dataIngestionManager.startAutoSync();
                 }));
@@ -234,7 +234,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setDynamicTooltip()
                 .onChange(async (value) => {
                     this.plugin.settings.maxChatHistory = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -244,7 +244,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.showSources)
                 .onChange(async (value) => {
                     this.plugin.settings.showSources = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         new Setting(containerEl)
@@ -254,7 +254,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.streamResponses)
                 .onChange(async (value) => {
                     this.plugin.settings.streamResponses = value;
-                    await this.plugin.saveSettings();
+                    await this.plugin.saveData(this.plugin.settings);
                 }));
 
         // Actions

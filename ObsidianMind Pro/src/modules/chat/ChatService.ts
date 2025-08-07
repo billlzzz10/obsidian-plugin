@@ -2,7 +2,7 @@ import { Plugin } from 'obsidian';
 import { AIModelManager } from '../ai-models/AIModelManager';
 import { RAGService } from '../rag/RAGService';
 import { ChatMessage, RetrievedSource } from '../utils/types';
-import { validateApiKey } from '../utils/helpers';
+import { validateApiKey, createTimeoutSignal } from '../utils/helpers';
 import { DEFAULT_REQUEST_TIMEOUT } from '../utils/constants';
 
 interface ChatResponse {
@@ -11,9 +11,9 @@ interface ChatResponse {
 }
 
 export class ChatService {
-    private plugin: Plugin;
-    private aiModelManager: AIModelManager;
-    private ragService: RAGService;
+    private plugin!: Plugin;
+    private aiModelManager!: AIModelManager;
+    private ragService!: RAGService;
 
     constructor(plugin: Plugin) {
         this.plugin = plugin;
@@ -100,7 +100,7 @@ export class ChatService {
                 temperature: 0.7,
                 stream: false // For now, disable streaming
             }),
-            signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+            signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
         });
 
         if (!response.ok) {
@@ -131,7 +131,7 @@ export class ChatService {
                 ],
                 temperature: 0.7
             }),
-            signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+            signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
         });
 
         if (!response.ok) {
@@ -164,7 +164,7 @@ export class ChatService {
                     maxOutputTokens: Math.min(4000, modelConfig.maxTokens)
                 }
             }),
-            signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+            signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
         });
 
         if (!response.ok) {

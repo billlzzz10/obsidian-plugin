@@ -11,8 +11,8 @@ interface PromptTemplate {
 }
 
 export class PromptGenerator {
-    private plugin: Plugin;
-    private ragService: RAGService;
+    private plugin!: Plugin;
+    private ragService!: RAGService;
     private promptTemplates: Map<string, PromptTemplate> = new Map();
 
     constructor(plugin: Plugin) {
@@ -196,7 +196,7 @@ export class PromptGenerator {
         }
         
         this.plugin.settings.customPromptTemplates = customTemplates;
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
     }
 
     async removeCustomTemplate(templateId: string): Promise<void> {
@@ -205,7 +205,7 @@ export class PromptGenerator {
         // Remove from settings
         this.plugin.settings.customPromptTemplates = 
             (this.plugin.settings.customPromptTemplates || []).filter(t => t.id !== templateId);
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
     }
 
     // Generate prompt variations for A/B testing

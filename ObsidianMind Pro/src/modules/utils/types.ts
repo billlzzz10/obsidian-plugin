@@ -5,6 +5,7 @@ export interface ObsidianNote {
     path: string;
     name: string;
     content: string;
+    frontmatter: Record<string, any>;
     createdAt: Date;
     updatedAt: Date;
     tags: string[];
@@ -14,6 +15,7 @@ export interface NotionPage {
     id: string;
     title: string;
     content: string;
+    properties: any;
     url: string;
     createdAt: Date;
     updatedAt: Date;
@@ -22,6 +24,8 @@ export interface NotionPage {
 export interface AirtableRecord {
     id: string;
     fields: Record<string, any>;
+    baseId: string;
+    tableId: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -44,6 +48,7 @@ export interface EmbeddingVector {
 }
 
 export interface RetrievedSource {
+    id: string;
     content: string;
     title: string;
     path?: string;
@@ -108,6 +113,58 @@ export enum ERROR_CODES {
     TOOL_EXECUTION_FAILED = "TOOL_EXECUTION_FAILED",
     MACRO_EXECUTION_FAILED = "MACRO_EXECUTION_FAILED",
     OBSIDIAN_API_ERROR = "OBSIDIAN_API_ERROR",
+}
+
+export interface RAGQuery {
+    text?: string;
+    query?: string;
+    maxResults?: number;
+    threshold?: number;
+    similarityThreshold?: number;
+    sourceTypes?: ('obsidian' | 'notion' | 'airtable')[];
+    filters?: any;
+}
+
+export interface SyncStatus {
+    isRunning: boolean;
+    progress: number;
+    status: string;
+    lastSyncTime?: Date;
+    errors?: string[];
+    sourceType?: string;
+    lastSync?: Date;
+    itemsProcessed?: number;
+    totalItems?: number;
+}
+
+export interface CustomTool {
+    id: string;
+    name: string;
+    description: string;
+    schema: Record<string, any>;
+    handler: string; // JavaScript code or URL
+}
+
+export interface AIModelConfig {
+    id: string;
+    name: string;
+    provider: string;
+    modelName?: string;
+    maxTokens: number;
+    temperature?: number;
+    apiEndpoint?: string;
+    supportsStreaming?: boolean;
+    supportsFunctionCalling?: boolean;
+}
+
+export interface CustomModelConfig {
+    id: string;
+    name: string;
+    apiEndpoint: string;
+    apiKey: string;
+    modelType: 'openai' | 'anthropic' | 'google' | 'azure' | 'custom';
+    maxTokens: number;
+    temperature: number;
 }
 
 

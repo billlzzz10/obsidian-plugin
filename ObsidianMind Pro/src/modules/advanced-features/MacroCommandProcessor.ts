@@ -19,10 +19,10 @@ interface MacroCommandStep {
 }
 
 export class MacroCommandProcessor {
-    private plugin: Plugin;
-    private chatService: ChatService;
-    private toolManager: ToolManager;
-    private ragService: RAGService;
+    private plugin!: Plugin;
+    private chatService!: ChatService;
+    private toolManager!: ToolManager;
+    private ragService!: RAGService;
     private macroCommands: Map<string, MacroCommand> = new Map();
 
     constructor(plugin: Plugin) {
@@ -214,14 +214,14 @@ export class MacroCommandProcessor {
         }
         
         this.plugin.settings.customMacroCommands = customMacros;
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
     }
 
     async removeCustomMacroCommand(macroId: string): Promise<void> {
         this.macroCommands.delete(macroId);
         this.plugin.settings.customMacroCommands = 
             (this.plugin.settings.customMacroCommands || []).filter(m => m.id !== macroId);
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
     }
 
     async cleanup() {

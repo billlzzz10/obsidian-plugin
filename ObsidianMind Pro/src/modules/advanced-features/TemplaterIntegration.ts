@@ -3,9 +3,9 @@ import { RAGService } from '../rag/RAGService';
 import { ChatService } from '../chat/ChatService';
 
 export class TemplaterIntegration {
-    private plugin: Plugin;
-    private ragService: RAGService;
-    private chatService: ChatService;
+    private plugin!: Plugin;
+    private ragService!: RAGService;
+    private chatService!: ChatService;
     private isTemplaterAvailable = false;
 
     constructor(plugin: Plugin) {
@@ -60,7 +60,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Chat error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -82,7 +82,7 @@ export class TemplaterIntegration {
             return result;
         } catch (error) {
             console.error('AI Search error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -94,7 +94,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Summarize error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -124,7 +124,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Generate Content error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -136,7 +136,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Extract Info error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 

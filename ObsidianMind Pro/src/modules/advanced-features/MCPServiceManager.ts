@@ -2,7 +2,7 @@ import { Plugin } from 'obsidian';
 import { MCPServiceConfig } from '../../settings';
 
 export class MCPServiceManager {
-    private plugin: Plugin;
+    private plugin!: Plugin;
     private activeServices: Map<string, MCPService> = new Map();
 
     constructor(plugin: Plugin) {
@@ -95,7 +95,7 @@ export class MCPServiceManager {
 }
 
 class MCPService {
-    private config: MCPServiceConfig;
+    private config!: MCPServiceConfig;
     private status: 'running' | 'stopped' | 'error' = 'stopped';
     private process?: any;
     private connection?: any;

@@ -19,8 +19,8 @@ interface ToolParameter {
 }
 
 export class ToolManager {
-    private plugin: Plugin;
-    private chatService: ChatService;
+    private plugin!: Plugin;
+    private chatService!: ChatService;
     private tools: Map<string, Tool> = new Map();
 
     constructor(plugin: Plugin) {
@@ -253,7 +253,7 @@ export class ToolManager {
             await this.plugin.app.vault.create(path, content);
             return { success: true, path: path };
         } catch (error) {
-            throw new Error(`Failed to create note: ${error.message}`);
+            throw new Error(`Failed to create note: ${(error as Error).message}`);
         }
     }
 
@@ -269,7 +269,7 @@ export class ToolManager {
             const content = await this.plugin.app.vault.read(file as any);
             return { content: content };
         } catch (error) {
-            throw new Error(`Failed to read note: ${error.message}`);
+            throw new Error(`Failed to read note: ${(error as Error).message}`);
         }
     }
 
@@ -291,7 +291,7 @@ export class ToolManager {
             await this.plugin.app.vault.modify(file as any, newContent);
             return { success: true };
         } catch (error) {
-            throw new Error(`Failed to update note: ${error.message}`);
+            throw new Error(`Failed to update note: ${(error as Error).message}`);
         }
     }
 
@@ -321,7 +321,7 @@ export class ToolManager {
             await this.plugin.dataIngestionManager.syncExternalData();
             return { success: true, message: 'External data synced successfully' };
         } catch (error) {
-            throw new Error(`Failed to sync external data: ${error.message}`);
+            throw new Error(`Failed to sync external data: ${(error as Error).message}`);
         }
     }
 
@@ -330,7 +330,7 @@ export class ToolManager {
             await this.plugin.embeddingManager.rebuildEmbeddings();
             return { success: true, message: 'Embeddings rebuilt successfully' };
         } catch (error) {
-            throw new Error(`Failed to rebuild embeddings: ${error.message}`);
+            throw new Error(`Failed to rebuild embeddings: ${(error as Error).message}`);
         }
     }
 
@@ -399,7 +399,7 @@ export class ToolManager {
         }
         
         this.plugin.settings.customTools = customTools;
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
         
         // Reload tools
         this.loadCustomTools();
@@ -409,7 +409,7 @@ export class ToolManager {
         this.tools.delete(toolId);
         this.plugin.settings.customTools = 
             (this.plugin.settings.customTools || []).filter(t => t.id !== toolId);
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
     }
 
     async cleanup() {

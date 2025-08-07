@@ -1,10 +1,10 @@
 import { Plugin } from 'obsidian';
 import { NotionPage } from '../utils/types';
 import { NOTION_API_BASE, DEFAULT_REQUEST_TIMEOUT } from '../utils/constants';
-import { retryWithBackoff } from '../utils/helpers';
+import { retryWithBackoff, createTimeoutSignal } from '../utils/helpers';
 
 export class NotionAPI {
-    private plugin: Plugin;
+    private plugin!: Plugin;
     private apiKey: string;
 
     constructor(plugin: Plugin) {
@@ -55,7 +55,7 @@ export class NotionAPI {
                         'Notion-Version': '2022-06-28'
                     },
                     body: JSON.stringify(body),
-                    signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+                    signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
                 });
 
                 if (!fetchResponse.ok) {
@@ -115,7 +115,7 @@ export class NotionAPI {
                         'Authorization': `Bearer ${this.apiKey}`,
                         'Notion-Version': '2022-06-28'
                     },
-                    signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+                    signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
                 });
 
                 if (!fetchResponse.ok) {
@@ -188,7 +188,7 @@ export class NotionAPI {
                     'Authorization': `Bearer ${this.apiKey}`,
                     'Notion-Version': '2022-06-28'
                 },
-                signal: AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT)
+                signal: createTimeoutSignal(DEFAULT_REQUEST_TIMEOUT)
             });
 
             return response.ok;

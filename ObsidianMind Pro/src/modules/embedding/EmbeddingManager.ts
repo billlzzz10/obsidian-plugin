@@ -9,7 +9,7 @@ import { DEFAULT_CHUNK_SIZE, DEFAULT_CHUNK_OVERLAP, MAX_CONTENT_LENGTH } from '.
 export class EmbeddingManager {
     private plugin: Plugin;
     private embeddingService: EmbeddingService;
-    private vectorStore: VectorStore;
+    public vectorStore: VectorStore;
     private dataIngestionManager?: DataIngestionManager; // To get data for embedding
 
     constructor(plugin: Plugin) {

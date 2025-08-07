@@ -94,6 +94,7 @@ export class VectorStore {
             if (similarity >= (query.similarityThreshold || DEFAULT_SIMILARITY_THRESHOLD)) {
                 results.push({
                     source: {
+                        id: vector.id,
                         title: vector.metadata.title,
                         content: vector.content,
                         similarity: similarity,
@@ -144,6 +145,7 @@ export class VectorStore {
             if (similarity >= (query.similarityThreshold || DEFAULT_SIMILARITY_THRESHOLD)) {
                 results.push({
                     source: {
+                        id: vector.id,
                         title: vector.metadata.title,
                         content: vector.content,
                         similarity: similarity,

@@ -9,6 +9,9 @@ import { AIPluginSettings } from "./settings";
 
 declare module "obsidian" {
     interface App {
+        commands: {
+            executeCommandById(id: string): boolean;
+        };
         plugins: {
             plugins: {
                 "templater-obsidian"?: any; // For Templater plugin

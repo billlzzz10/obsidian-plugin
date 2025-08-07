@@ -1,10 +1,10 @@
 import { Plugin } from 'obsidian';
 import { AirtableRecord } from '../utils/types';
 import { AIRTABLE_API_BASE, DEFAULT_REQUEST_TIMEOUT } from '../utils/constants';
-import { retryWithBackoff } from '../utils/helpers';
+import { retryWithBackoff, createTimeoutSignal } from '../utils/helpers';
 
 export class AirtableAPI {
-    private plugin: Plugin;
+    private plugin!: Plugin;
     private apiKey: string;
 
     constructor(plugin: Plugin) {

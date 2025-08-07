@@ -13,15 +13,15 @@ import { AdvancedFeaturesManager } from './modules/advanced-features/AdvancedFea
 import { MCPServiceManager } from './modules/advanced-features/MCPServiceManager';
 
 export default class AIPlugin extends Plugin {
-    settings: AIPluginSettings;
-    dataIngestionManager: DataIngestionManager;
-    embeddingManager: EmbeddingManager;
-    ragService: RAGService;
-    aiModelManager: AIModelManager;
-    azureTranslatorService: AzureTranslatorService;
-    chatService: ChatService;
-    advancedFeaturesManager: AdvancedFeaturesManager;
-    mcpServiceManager: MCPServiceManager;
+    settings!: AIPluginSettings;
+    dataIngestionManager!: DataIngestionManager;
+    embeddingManager!: EmbeddingManager;
+    ragService!: RAGService;
+    aiModelManager!: AIModelManager;
+    azureTranslatorService!: AzureTranslatorService;
+    chatService!: ChatService;
+    advancedFeaturesManager!: AdvancedFeaturesManager;
+    mcpServiceManager!: MCPServiceManager;
 
     async onload() {
         console.log('Loading Obsidian AI Plugin...');
@@ -105,10 +105,6 @@ export default class AIPlugin extends Plugin {
 
     async loadSettings() {
         this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    }
-
-    async saveSettings() {
-        await this.saveData(this.settings);
     }
 
     async activateView() {

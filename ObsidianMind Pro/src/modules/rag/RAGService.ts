@@ -1,23 +1,14 @@
 import { Plugin } from 'obsidian';
 import { EmbeddingManager } from '../embedding/EmbeddingManager';
 import { VectorStore } from '../embedding/VectorStore';
-import { RetrievedSource } from '../utils/types';
-
-// Define RAGQuery and RAGResult types here if they do not exist elsewhere
-export interface RAGQuery {
-    query: string;
-    maxResults: number;
-    similarityThreshold: number;
-    sourceTypes?: ('obsidian' | 'notion' | 'airtable')[];
-    filters?: any;
-}
+import { RetrievedSource, RAGQuery } from '../utils/types';
+import { DEFAULT_SIMILARITY_THRESHOLD, MAX_RETRIEVED_CHUNKS, DEFAULT_CONTEXT_WINDOW } from '../utils/constants';
 
 export interface RAGResult {
     sources: RetrievedSource[];
     context: string;
     totalSources: number;
 }
-import { DEFAULT_SIMILARITY_THRESHOLD, MAX_RETRIEVED_CHUNKS, DEFAULT_CONTEXT_WINDOW } from '../utils/constants';
 
 export class RAGService {
     private plugin: Plugin;
@@ -181,6 +172,12 @@ export class RAGService {
         }
         
         return prompt;
+    }
+
+    async cleanup(): Promise<void> {
+        // Cleanup any resources if needed
+        this.isInitialized = false;
+        console.log('RAGService cleaned up.');
     }
 }
 
