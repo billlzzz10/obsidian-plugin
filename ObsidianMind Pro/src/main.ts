@@ -1,4 +1,4 @@
-import './global.d.ts';
+import "./global.d.ts";
 import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { AIPluginSettings, DEFAULT_SETTINGS } from './settings';
 import { AIPluginSettingTab } from './ui/SettingsTab';
@@ -13,19 +13,19 @@ import { AdvancedFeaturesManager } from './modules/advanced-features/AdvancedFea
 import { MCPServiceManager } from './modules/advanced-features/MCPServiceManager';
 
 export default class AIPlugin extends Plugin {
-    settings!: AIPluginSettings;
-    dataIngestionManager!: DataIngestionManager;
-    embeddingManager!: EmbeddingManager;
-    ragService!: RAGService;
-    aiModelManager!: AIModelManager;
-    azureTranslatorService!: AzureTranslatorService;
-    chatService!: ChatService;
-    advancedFeaturesManager!: AdvancedFeaturesManager;
-    mcpServiceManager!: MCPServiceManager;
+    settings: AIPluginSettings;
+    dataIngestionManager: DataIngestionManager;
+    embeddingManager: EmbeddingManager;
+    ragService: RAGService;
+    aiModelManager: AIModelManager;
+    azureTranslatorService: AzureTranslatorService;
+    chatService: ChatService;
+    advancedFeaturesManager: AdvancedFeaturesManager;
+    mcpServiceManager: MCPServiceManager;
 
     async onload() {
         console.log('Loading Obsidian AI Plugin...');
-
+        
         await this.loadSettings();
 
         // Initialize managers and services
@@ -55,7 +55,7 @@ export default class AIPlugin extends Plugin {
             (leaf) => new ChatView(leaf, this)
         );
 
-        this.addRibbonIcon('bot', 'Open AI Chat', () => {
+        this.addRibbonIcon("bot", "Open AI Chat", () => {
             this.activateView();
         });
 
@@ -90,7 +90,7 @@ export default class AIPlugin extends Plugin {
 
     async onunload() {
         console.log('Unloading Obsidian AI Plugin...');
-
+        
         this.app.workspace.detachLeavesOfType(VIEW_TYPE_CHAT);
 
         await this.advancedFeaturesManager.cleanup();
@@ -105,6 +105,10 @@ export default class AIPlugin extends Plugin {
 
     async loadSettings() {
         this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    }
+
+    async saveSettings() {
+        await this.saveData(this.settings);
     }
 
     async activateView() {
