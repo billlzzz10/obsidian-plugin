@@ -1,4 +1,4 @@
-import { Plugin, TFile } from 'obsidian';
+import { Plugin } from 'obsidian';
 import { RAGService } from '../rag/RAGService';
 import { ChatService } from '../chat/ChatService';
 

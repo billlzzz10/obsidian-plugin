@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ChatMessage } from '../../modules/utils/types';
-import { formatDuration } from '../../modules/utils/helpers';
 
 interface MessageBubbleProps {
     message: ChatMessage;
@@ -70,7 +69,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, showSourc
 
                     {showSourcesExpanded && (
                         <div className="ai-plugin-sources-list">
-                            {message.sources.map((source, index) => (
+                            {message.sources.map((source, _index) => (
                                 <div key={source.id} className="ai-plugin-source-item">
                                     <div className="ai-plugin-source-header">
                                         <span className="ai-plugin-source-title">

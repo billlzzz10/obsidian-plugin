@@ -127,11 +127,12 @@ export class MacroCommandProcessor {
 
             try {
                 switch (step.type) {
-                    case 'ai_chat':
+                    case 'ai_chat': {
                         const chatResponse = await this.chatService.sendMessage(stepInput);
                         stepOutput = chatResponse.content;
                         break;
-                    case 'ai_generate_prompt':
+                    }
+                    case 'ai_generate_prompt': {
                         const promptGenerator = this.plugin.advancedFeaturesManager.promptGenerator;
                         const promptParams: Record<string, any> = {};
                         if (step.parameters) {
@@ -143,7 +144,8 @@ export class MacroCommandProcessor {
                         }
                         stepOutput = await promptGenerator.generatePrompt(stepInput, promptParams);
                         break;
-                    case 'ai_tool_use':
+                    }
+                    case 'ai_tool_use': {
                         const toolParams: Record<string, any> = {};
                         if (step.parameters) {
                             for (const [paramKey, paramValue] of Object.entries(step.parameters)) {
@@ -154,6 +156,7 @@ export class MacroCommandProcessor {
                         }
                         stepOutput = await this.toolManager.executeTool(stepInput, toolParams);
                         break;
+                    }
                     case 'obsidian_command':
                         // This is a placeholder. Actual Obsidian command execution is complex.
                         // For now, we'll simulate or require specific handlers.
@@ -205,7 +208,7 @@ export class MacroCommandProcessor {
         this.macroCommands.set(macro.id, macro);
 
         const customMacros = this.plugin.settings.customMacroCommands || [];
-        const existingIndex = customMacros.findIndex(m => m.id === macro.id);
+        const existingIndex = customMacros.findIndex((m: {id: string}) => m.id === macro.id);
 
         if (existingIndex >= 0) {
             customMacros[existingIndex] = macro;
@@ -220,7 +223,7 @@ export class MacroCommandProcessor {
     async removeCustomMacroCommand(macroId: string): Promise<void> {
         this.macroCommands.delete(macroId);
         this.plugin.settings.customMacroCommands =
-            (this.plugin.settings.customMacroCommands || []).filter(m => m.id !== macroId);
+            (this.plugin.settings.customMacroCommands || []).filter((m: {id: string}) => m.id !== macroId);
         await this.plugin.saveData(this.plugin.settings);
     }
 

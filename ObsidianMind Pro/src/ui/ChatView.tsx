@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, setIcon } from 'obsidian';
+import { ItemView, WorkspaceLeaf } from 'obsidian';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { App } from './components/App';

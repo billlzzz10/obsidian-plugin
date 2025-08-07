@@ -1,6 +1,5 @@
 import { Plugin } from 'obsidian';
 import { EmbeddingVector, RetrievedSource, RAGQuery } from '../utils/types';
-import { generateId } from '../utils/helpers';
 import { VECTOR_STORE_NAME, DEFAULT_SIMILARITY_THRESHOLD } from '../utils/constants';
 
 interface VectorStoreData {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { ChatMessage } from '../../modules/utils/types';
 import { MessageBubble } from './MessageBubble';
 import { MessageInput } from './MessageInput';

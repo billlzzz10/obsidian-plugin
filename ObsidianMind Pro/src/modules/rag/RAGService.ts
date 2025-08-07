@@ -64,7 +64,7 @@ export class RAGService {
         }
     }
 
-    private buildContext(sources: RetrievedSource[], query: RAGQuery): string {
+    private buildContext(sources: RetrievedSource[], _query: RAGQuery): string {
         if (sources.length === 0) {
             return '';
         }

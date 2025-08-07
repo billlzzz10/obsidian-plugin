@@ -156,13 +156,14 @@ export class PromptGenerator {
                     focus: 'key insights and patterns'
                 });
                 break;
-            default:
+            default: {
                 // For general queries, enhance with RAG context
                 const context = await this.ragService.getContextForPrompt(userInput, 2000);
                 basePrompt = userInput;
                 if (context) {
                     basePrompt += `\n\nRelevant context from your knowledge base:\n${context}`;
                 }
+            }
         }
 
         return basePrompt;
@@ -187,7 +188,7 @@ export class PromptGenerator {
 
         // Save to settings
         const customTemplates = this.plugin.settings.customPromptTemplates || [];
-        const existingIndex = customTemplates.findIndex(t => t.id === template.id);
+        const existingIndex = customTemplates.findIndex((t: {id: string}) => t.id === template.id);
 
         if (existingIndex >= 0) {
             customTemplates[existingIndex] = template;
@@ -204,7 +205,7 @@ export class PromptGenerator {
 
         // Remove from settings
         this.plugin.settings.customPromptTemplates =
-            (this.plugin.settings.customPromptTemplates || []).filter(t => t.id !== templateId);
+            (this.plugin.settings.customPromptTemplates || []).filter((t: {id: string}) => t.id !== templateId);
         await this.plugin.saveData(this.plugin.settings);
     }
 

@@ -67,7 +67,7 @@ jobs:
     - name: Run CodeQL Analysis
       uses: github/codeql-action/analyze@v3
       with:
-        languages: javascript
+        language: javascript
 
   release:
     needs: [test, security-scan]

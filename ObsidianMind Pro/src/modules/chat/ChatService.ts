@@ -1,7 +1,7 @@
 import { Plugin } from 'obsidian';
 import { AIModelManager } from '../ai-models/AIModelManager';
 import { RAGService } from '../rag/RAGService';
-import { ChatMessage, RetrievedSource } from '../utils/types';
+import { RetrievedSource } from '../utils/types';
 import { validateApiKey, createTimeoutSignal } from '../utils/helpers';
 import { DEFAULT_REQUEST_TIMEOUT } from '../utils/constants';
 

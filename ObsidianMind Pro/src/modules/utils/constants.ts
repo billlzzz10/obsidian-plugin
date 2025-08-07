@@ -62,53 +62,53 @@ export const SETTINGS_TAB_ID = 'ai-plugin-settings';
 
 // Error codes
 export const ERROR_CODES = {
-	INITIALIZATION_FAILED: 'INIT_FAILED',
-	API_KEY_MISSING: 'API_KEY_MISSING',
-	API_REQUEST_FAILED: 'API_REQUEST_FAILED',
-	EMBEDDING_FAILED: 'EMBEDDING_FAILED',
-	VECTOR_STORE_ERROR: 'VECTOR_STORE_ERROR',
-	SYNC_FAILED: 'SYNC_FAILED',
-	INVALID_CONFIGURATION: 'INVALID_CONFIG',
-	RATE_LIMIT_EXCEEDED: 'RATE_LIMIT',
-	NETWORK_ERROR: 'NETWORK_ERROR',
-	UNKNOWN_ERROR: 'UNKNOWN_ERROR'
+    INITIALIZATION_FAILED: 'INIT_FAILED',
+    API_KEY_MISSING: 'API_KEY_MISSING',
+    API_REQUEST_FAILED: 'API_REQUEST_FAILED',
+    EMBEDDING_FAILED: 'EMBEDDING_FAILED',
+    VECTOR_STORE_ERROR: 'VECTOR_STORE_ERROR',
+    SYNC_FAILED: 'SYNC_FAILED',
+    INVALID_CONFIGURATION: 'INVALID_CONFIG',
+    RATE_LIMIT_EXCEEDED: 'RATE_LIMIT',
+    NETWORK_ERROR: 'NETWORK_ERROR',
+    UNKNOWN_ERROR: 'UNKNOWN_ERROR'
 } as const;
 
 // Model configurations
 export const SUPPORTED_MODELS = {
-	OPENAI: {
-		'gpt-4o': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
-		'gpt-4o-mini': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
-		'gpt-4-turbo': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
-		'gpt-3.5-turbo': { maxTokens: 16385, supportsStreaming: true, supportsFunctionCalling: true }
-	},
-	ANTHROPIC: {
-		'claude-3-5-sonnet-20241022': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true },
-		'claude-3-haiku-20240307': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true },
-		'claude-3-opus-20240229': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true }
-	},
-	GOOGLE: {
-		'gemini-1.5-pro': { maxTokens: 2097152, supportsStreaming: true, supportsFunctionCalling: true },
-		'gemini-1.5-flash': { maxTokens: 1048576, supportsStreaming: true, supportsFunctionCalling: true }
-	},
-	AZURE: {
-		'azure-translator': { maxTokens: 50000, supportsStreaming: false, supportsFunctionCalling: false },
-		'azure-gpt-4': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
-		'azure-gpt-35-turbo': { maxTokens: 16385, supportsStreaming: true, supportsFunctionCalling: true }
-	}
+    OPENAI: {
+        'gpt-4o': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
+        'gpt-4o-mini': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
+        'gpt-4-turbo': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
+        'gpt-3.5-turbo': { maxTokens: 16385, supportsStreaming: true, supportsFunctionCalling: true }
+    },
+    ANTHROPIC: {
+        'claude-3-5-sonnet-20241022': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true },
+        'claude-3-haiku-20240307': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true },
+        'claude-3-opus-20240229': { maxTokens: 200000, supportsStreaming: true, supportsFunctionCalling: true }
+    },
+    GOOGLE: {
+        'gemini-1.5-pro': { maxTokens: 2097152, supportsStreaming: true, supportsFunctionCalling: true },
+        'gemini-1.5-flash': { maxTokens: 1048576, supportsStreaming: true, supportsFunctionCalling: true }
+    },
+    AZURE: {
+        'azure-translator': { maxTokens: 50000, supportsStreaming: false, supportsFunctionCalling: false },
+        'azure-gpt-4': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
+        'azure-gpt-35-turbo': { maxTokens: 16385, supportsStreaming: true, supportsFunctionCalling: true }
+    }
 } as const;
 
 // Embedding model configurations
 export const EMBEDDING_MODELS = {
-	'sentence-transformers/all-MiniLM-L6-v2': {
-		dimensions: 384,
-		maxSequenceLength: 256,
-		size: '22MB'
-	},
-	'sentence-transformers/all-mpnet-base-v2': {
-		dimensions: 768,
-		maxSequenceLength: 384,
-		size: '420MB'
-	}
+    'sentence-transformers/all-MiniLM-L6-v2': {
+        dimensions: 384,
+        maxSequenceLength: 256,
+        size: '22MB'
+    },
+    'sentence-transformers/all-mpnet-base-v2': {
+        dimensions: 768,
+        maxSequenceLength: 384,
+        size: '420MB'
+    }
 } as const;
 

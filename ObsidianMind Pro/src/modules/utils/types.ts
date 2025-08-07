@@ -1,6 +1,3 @@
-import { TFile } from 'obsidian';
-import { AIPluginSettings } from '../../settings';
-
 export interface ObsidianNote {
     path: string;
     name: string;

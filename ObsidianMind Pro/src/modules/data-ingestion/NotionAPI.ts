@@ -82,11 +82,12 @@ export class NotionAPI {
     }
 
     private async convertNotionPageToNotionPage(notionResult: any): Promise<NotionPage> {
-        // Extract title from properties
         let title = 'Untitled';
-        for (const [key, property] of Object.entries(notionResult.properties)) {
-            if ((property as any).type === 'title' && (property as any).title.length > 0) {
-                title = (property as any).title[0].plain_text;
+        const properties = notionResult.properties;
+        for (const propertyName in properties) {
+            const property = properties[propertyName];
+            if (property.type === 'title' && property.title.length > 0) {
+                title = property.title[0].plain_text;
                 break;
             }
         }
@@ -155,10 +156,11 @@ export class NotionAPI {
                 case 'numbered_list_item':
                     text += '1. ' + this.extractTextFromRichText(block.numbered_list_item.rich_text) + '\n';
                     break;
-                case 'to_do':
+                case 'to_do': {
                     const checked = block.to_do.checked ? '[x]' : '[ ]';
                     text += `${checked} ${this.extractTextFromRichText(block.to_do.rich_text)}\n`;
                     break;
+                }
                 case 'code':
                     text += '```\n' + this.extractTextFromRichText(block.code.rich_text) + '\n```\n\n';
                     break;

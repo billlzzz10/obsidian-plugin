@@ -1,5 +1,4 @@
 import { Plugin } from 'obsidian';
-import { AZURE_TRANSLATOR_API_BASE } from '../utils/constants';
 
 export interface AzureTranslatorConfig {
     apiKey: string;
@@ -33,7 +32,7 @@ export class AzureTranslatorService {
             const url = new URL('/translate', this.config.endpoint);
             url.searchParams.append('api-version', '3.0');
             url.searchParams.append('to', request.to);
-            
+
             if (request.from) {
                 url.searchParams.append('from', request.from);
             }
@@ -57,7 +56,7 @@ export class AzureTranslatorService {
             }
 
             const result = await response.json();
-            
+
             if (!result || !result[0] || !result[0].translations || !result[0].translations[0]) {
                 throw new Error('Invalid response from Azure Translator API');
             }
@@ -100,7 +99,7 @@ export class AzureTranslatorService {
             }
 
             const result = await response.json();
-            
+
             if (!result || !result[0]) {
                 throw new Error('Invalid response from Azure Language Detection API');
             }
@@ -140,14 +139,14 @@ export class AzureTranslatorService {
     async translateBatch(requests: TranslationRequest[]): Promise<TranslationResult[]> {
         try {
             const results: TranslationResult[] = [];
-            
+
             // Azure Translator supports batch requests, but for simplicity, we'll do them one by one
             // In production, you might want to implement proper batch processing
             for (const request of requests) {
                 const result = await this.translateText(request);
                 results.push(result);
             }
-            
+
             return results;
         } catch (error) {
             console.error('Azure Batch Translation error:', error);

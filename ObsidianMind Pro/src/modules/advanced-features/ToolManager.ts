@@ -224,7 +224,7 @@ export class ToolManager {
         return response.json();
     }
 
-    private async executeScriptTool(toolConfig: any, params: Record<string, any>): Promise<any> {
+    private async executeScriptTool(_toolConfig: any, _params: Record<string, any>): Promise<any> {
         // For security reasons, script execution should be limited
         // This is a placeholder for potential script execution functionality
         throw new Error('Script tools are not yet implemented for security reasons');
@@ -296,7 +296,7 @@ export class ToolManager {
     }
 
     private async listNotes(params: Record<string, any>): Promise<any> {
-        const { folder, tags } = params;
+        const { folder } = params;
 
         let files = this.plugin.app.vault.getMarkdownFiles();
 
@@ -316,7 +316,7 @@ export class ToolManager {
         };
     }
 
-    private async syncExternalData(params: Record<string, any>): Promise<any> {
+    private async syncExternalData(_params: Record<string, any>): Promise<any> {
         try {
             await this.plugin.dataIngestionManager.syncExternalData();
             return { success: true, message: 'External data synced successfully' };
@@ -325,7 +325,7 @@ export class ToolManager {
         }
     }
 
-    private async rebuildEmbeddings(params: Record<string, any>): Promise<any> {
+    private async rebuildEmbeddings(_params: Record<string, any>): Promise<any> {
         try {
             await this.plugin.embeddingManager.rebuildEmbeddings();
             return { success: true, message: 'Embeddings rebuilt successfully' };
@@ -390,7 +390,7 @@ export class ToolManager {
 
     async addCustomTool(toolConfig: any): Promise<void> {
         const customTools = this.plugin.settings.customTools || [];
-        const existingIndex = customTools.findIndex(t => t.id === toolConfig.id);
+        const existingIndex = customTools.findIndex((t: {id: string}) => t.id === toolConfig.id);
 
         if (existingIndex >= 0) {
             customTools[existingIndex] = toolConfig;
@@ -408,7 +408,7 @@ export class ToolManager {
     async removeCustomTool(toolId: string): Promise<void> {
         this.tools.delete(toolId);
         this.plugin.settings.customTools =
-            (this.plugin.settings.customTools || []).filter(t => t.id !== toolId);
+            (this.plugin.settings.customTools || []).filter((t: {id: string}) => t.id !== toolId);
         await this.plugin.saveData(this.plugin.settings);
     }
 
