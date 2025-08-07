@@ -116,3 +116,7 @@ main.js
 *.js.map
 .hotreload
 
+# Translation tools (but not the translated files)
+tran-th/enhanced_translate_markdown.py
+tran-th/run_enhanced_translation.bat
+

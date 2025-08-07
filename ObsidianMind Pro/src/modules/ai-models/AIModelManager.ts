@@ -49,6 +49,26 @@ export class AIModelManager {
                 id: id,
                 name: `Google: ${id}`,
                 provider: 'google',
+                apiEndpoint: `https://generativelanguage.googleapis.com/v1/models/${id}:generateContent`,
+                maxTokens: config.maxTokens,
+                supportsStreaming: config.supportsStreaming,
+                supportsFunctionCalling: config.supportsFunctionCalling
+            });
+        }
+
+        // Load Azure models
+        for (const [id, config] of Object.entries(SUPPORTED_MODELS.AZURE || {})) {
+            this.availableModels.set(id, {
+                id: id,
+                name: `Azure: ${id}`,
+                provider: 'azure',
+                apiEndpoint: '', // Will be set from settings
+                maxTokens: config.maxTokens,
+                supportsStreaming: config.supportsStreaming,
+                supportsFunctionCalling: config.supportsFunctionCalling
+            });
+        }
+                provider: 'google',
                 apiEndpoint: 'https://generativelanguage.googleapis.com/v1/models',
                 maxTokens: config.maxTokens,
                 supportsStreaming: config.supportsStreaming,

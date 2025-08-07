@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+
+# Build outputs
+*.js
+*.js.map
+dist/
+build/
+
+# Development
+.env
+.env.local
+
+# Translation tools and outputs
+obsidian-n-a/tran-th/enhanced_translate_markdown.py
+obsidian-n-a/tran-th/run_enhanced_translation.bat
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

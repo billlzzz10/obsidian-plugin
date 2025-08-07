@@ -11,9 +11,9 @@ export interface AIPluginSettings {
     maxRetrievedChunks: number;
     similarityThreshold: number;
     notionIntegrationToken: string;
-    notionDatabaseIds: string;
+    notionDatabaseIds: string[];
     airtableApiKey: string;
-    airtableBaseIds: string;
+    airtableBaseIds: string[];
     autoSync: boolean;
     syncInterval: number;
     customPromptTemplates: PromptTemplate[];

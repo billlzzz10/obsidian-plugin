@@ -7,8 +7,10 @@ import { DataIngestionManager } from './modules/data-ingestion/DataIngestionMana
 import { EmbeddingManager } from './modules/embedding/EmbeddingManager';
 import { RAGService } from './modules/rag/RAGService';
 import { AIModelManager } from './modules/ai-models/AIModelManager';
+import { AzureTranslatorService } from './modules/ai-models/AzureTranslatorService';
 import { ChatService } from './modules/chat/ChatService';
 import { AdvancedFeaturesManager } from './modules/advanced-features/AdvancedFeaturesManager';
+import { MCPServiceManager } from './modules/advanced-features/MCPServiceManager';
 
 export default class AIPlugin extends Plugin {
     settings: AIPluginSettings;
@@ -16,8 +18,10 @@ export default class AIPlugin extends Plugin {
     embeddingManager: EmbeddingManager;
     ragService: RAGService;
     aiModelManager: AIModelManager;
+    azureTranslatorService: AzureTranslatorService;
     chatService: ChatService;
     advancedFeaturesManager: AdvancedFeaturesManager;
+    mcpServiceManager: MCPServiceManager;
 
     async onload() {
         console.log('Loading Obsidian AI Plugin...');
@@ -29,8 +33,14 @@ export default class AIPlugin extends Plugin {
         this.embeddingManager = new EmbeddingManager(this);
         this.ragService = new RAGService(this, this.embeddingManager, this.embeddingManager.vectorStore);
         this.aiModelManager = new AIModelManager(this);
+        this.azureTranslatorService = new AzureTranslatorService(this, {
+            apiKey: this.settings.azureApiKey,
+            endpoint: this.settings.azureEndpoint,
+            region: this.settings.azureRegion
+        });
         this.chatService = new ChatService(this);
         this.advancedFeaturesManager = new AdvancedFeaturesManager(this);
+        this.mcpServiceManager = new MCPServiceManager(this);
 
         await this.dataIngestionManager.initialize();
         await this.embeddingManager.initialize();

@@ -28,6 +28,7 @@ export const DEFAULT_CONTEXT_WINDOW = 8000;
 export const OPENAI_API_BASE = 'https://api.openai.com/v1';
 export const ANTHROPIC_API_BASE = 'https://api.anthropic.com/v1';
 export const GOOGLE_AI_API_BASE = 'https://generativelanguage.googleapis.com/v1';
+export const AZURE_TRANSLATOR_API_BASE = 'https://api.cognitive.microsoft.com/translator/text/v3.0';
 export const NOTION_API_BASE = 'https://api.notion.com/v1';
 export const AIRTABLE_API_BASE = 'https://api.airtable.com/v0';
 
@@ -89,6 +90,11 @@ export const SUPPORTED_MODELS = {
 	GOOGLE: {
 		'gemini-1.5-pro': { maxTokens: 2097152, supportsStreaming: true, supportsFunctionCalling: true },
 		'gemini-1.5-flash': { maxTokens: 1048576, supportsStreaming: true, supportsFunctionCalling: true }
+	},
+	AZURE: {
+		'azure-translator': { maxTokens: 50000, supportsStreaming: false, supportsFunctionCalling: false },
+		'azure-gpt-4': { maxTokens: 128000, supportsStreaming: true, supportsFunctionCalling: true },
+		'azure-gpt-35-turbo': { maxTokens: 16385, supportsStreaming: true, supportsFunctionCalling: true }
 	}
 } as const;
 

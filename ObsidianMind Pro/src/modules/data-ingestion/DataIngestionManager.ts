@@ -2,8 +2,31 @@ import { Plugin, TFile } from 'obsidian';
 import { NotionAPI } from './NotionAPI';
 import { AirtableAPI } from './AirtableAPI';
 import { EmbeddingManager } from '../embedding/EmbeddingManager';
-import { ObsidianNote, NotionPage, AirtableRecord, SyncStatus } from '../utils/types';
-import { extractFrontmatter } from '../utils/helpers';
+import { ObsidianNote, NotionPage, AirtableRecord } from '../utils/types';
+// import { extractFrontmatter } from '../utils/helpers';
+
+// Simple frontmatter extractor (YAML frontmatter)
+function extractFrontmatter(content: string): { frontmatter: Record<string, any>, content: string } {
+    const match = /^---\n([\s\S]*?)\n---\n?([\s\S]*)$/m.exec(content);
+    if (match) {
+        try {
+            const yaml = match[1];
+            // Use a simple YAML parser or fallback to empty object
+            // For now, just parse key: value pairs (not full YAML)
+            const frontmatter: Record<string, any> = {};
+            yaml.split('\n').forEach(line => {
+                const [key, ...rest] = line.split(':');
+                if (key && rest.length > 0) {
+                    frontmatter[key.trim()] = rest.join(':').trim();
+                }
+            });
+            return { frontmatter, content: match[2] };
+        } catch {
+            return { frontmatter: {}, content };
+        }
+    }
+    return { frontmatter: {}, content };
+}
 import { MIN_SYNC_INTERVAL, MAX_SYNC_INTERVAL } from '../utils/constants';
 
 export class DataIngestionManager {
