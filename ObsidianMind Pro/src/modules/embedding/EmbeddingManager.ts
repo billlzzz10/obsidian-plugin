@@ -9,7 +9,7 @@ import { DEFAULT_CHUNK_SIZE, DEFAULT_CHUNK_OVERLAP, MAX_CONTENT_LENGTH } from '.
 export class EmbeddingManager {
     private plugin: Plugin;
     private embeddingService: EmbeddingService;
-    private vectorStore: VectorStore;
+    public vectorStore: VectorStore;
     private dataIngestionManager?: DataIngestionManager; // To get data for embedding
 
     constructor(plugin: Plugin) {
@@ -32,10 +32,10 @@ export class EmbeddingManager {
 
     async rebuildEmbeddings(): Promise<void> {
         if (!this.dataIngestionManager) {
-            console.error("DataIngestionManager is not set. Cannot rebuild embeddings.");
+            console.error('DataIngestionManager is not set. Cannot rebuild embeddings.');
             return;
         }
-        console.log("Rebuilding all embeddings...");
+        console.log('Rebuilding all embeddings...');
         await this.vectorStore.clearAllEmbeddings();
 
         // Process Obsidian notes
@@ -121,8 +121,8 @@ export class EmbeddingManager {
                         createdAt: createdAt,
                         updatedAt: updatedAt,
                         chunkIndex: i,
-                        totalChunks: chunks.length,
-                    },
+                        totalChunks: chunks.length
+                    }
                 }));
 
                 if (embeddings.length > 0) {

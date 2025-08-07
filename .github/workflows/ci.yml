@@ -1,0 +1,109 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: 'ObsidianMind Pro/package-lock.json'
+
+    - name: Install dependencies
+      run: |
+        cd "ObsidianMind Pro"
+        npm ci
+
+    - name: Run linting
+      run: |
+        cd "ObsidianMind Pro"
+        npm run lint
+
+    - name: Run tests
+      run: |
+        cd "ObsidianMind Pro"
+        npm test
+
+    - name: Build plugin
+      run: |
+        cd "ObsidianMind Pro"
+        npm run build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: plugin-build-${{ matrix.node-version }}
+        path: |
+          ObsidianMind Pro/main.js
+          ObsidianMind Pro/manifest.json
+          ObsidianMind Pro/styles.css
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run security audit
+      run: |
+        cd "ObsidianMind Pro"
+        npm audit --audit-level moderate
+
+    - name: Run CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        languages: javascript
+
+  release:
+    needs: [test, security-scan]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+        cache-dependency-path: 'ObsidianMind Pro/package-lock.json'
+
+    - name: Install dependencies
+      run: |
+        cd "ObsidianMind Pro"
+        npm ci
+
+    - name: Build for production
+      run: |
+        cd "ObsidianMind Pro"
+        npm run build
+
+    - name: Create release package
+      run: |
+        cd "ObsidianMind Pro"
+        mkdir -p release
+        cp main.js manifest.json styles.css release/
+        zip -r obsidian-ai-plugin.zip release/
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-package
+        path: ObsidianMind Pro/obsidian-ai-plugin.zip

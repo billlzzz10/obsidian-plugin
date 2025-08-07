@@ -34,7 +34,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, showSourc
                 line = line.replace(/\*(.*?)\*/g, '<em>$1</em>');
                 // Handle inline code
                 line = line.replace(/`(.*?)`/g, '<code>$1</code>');
-                
+
                 return (
                     <div key={index} dangerouslySetInnerHTML={{ __html: line || '<br>' }} />
                 );
@@ -51,7 +51,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, showSourc
                     {formatTimestamp(message.timestamp)}
                 </span>
             </div>
-            
+
             <div className="ai-plugin-message-content">
                 {renderContent(message.content)}
             </div>
@@ -67,7 +67,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message, showSourc
                             ▼
                         </span>
                     </button>
-                    
+
                     {showSourcesExpanded && (
                         <div className="ai-plugin-sources-list">
                             {message.sources.map((source, index) => (

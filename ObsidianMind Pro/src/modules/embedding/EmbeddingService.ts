@@ -19,10 +19,10 @@ export class EmbeddingService {
             console.log(`Initializing embedding model: ${modelName}`);
 
             // Load the embedding model using Transformers.js
-            this.embeddingPipeline = await pipeline("feature-extraction", modelName, {
+            this.embeddingPipeline = await pipeline('feature-extraction', modelName, {
                 quantized: true, // Use quantized model for better performance
                 progress_callback: (progress: any) => {
-                    if (progress.status === "downloading") {
+                    if (progress.status === 'downloading') {
                         console.log(`Downloading embedding model: ${progress.progress}%`);
                     }
                 }
@@ -44,7 +44,7 @@ export class EmbeddingService {
         try {
             // Clean and prepare text
             const cleanText = this.preprocessText(text);
-            
+
             // Get embedding from the model
             const output = await this.embeddingPipeline(cleanText, {
                 pooling: 'mean',
@@ -53,7 +53,7 @@ export class EmbeddingService {
 
             // Convert to regular array
             const embedding = Array.from(output.data) as number[];
-            
+
             return embedding;
         } catch (error) {
             console.error('Failed to get embedding:', error);
@@ -63,13 +63,13 @@ export class EmbeddingService {
 
     async getEmbeddings(texts: string[]): Promise<number[][]> {
         if (!this.isInitialized || !this.embeddingPipeline) {
-            throw new Error("EmbeddingService not initialized");
+            throw new Error('EmbeddingService not initialized');
         }
 
         try {
             const cleanTexts = texts.map(text => this.preprocessText(text));
             const outputs = await this.embeddingPipeline(cleanTexts, {
-                pooling: "mean",
+                pooling: 'mean',
                 normalize: true
             });
 
@@ -81,7 +81,7 @@ export class EmbeddingService {
                 return [Array.from(outputs.data) as number[]];
             }
         } catch (error) {
-            console.error("Failed to get embeddings in batch:", error);
+            console.error('Failed to get embeddings in batch:', error);
             throw error;
         }
     }
@@ -97,7 +97,7 @@ export class EmbeddingService {
     getModelInfo(): { name: string; dimensions: number; maxSequenceLength: number } {
         const modelName = this.plugin.settings.embeddingModel || DEFAULT_EMBEDDING_MODEL;
         const modelConfig = EMBEDDING_MODELS[modelName as keyof typeof EMBEDDING_MODELS];
-        
+
         return {
             name: modelName,
             dimensions: modelConfig?.dimensions || 384,

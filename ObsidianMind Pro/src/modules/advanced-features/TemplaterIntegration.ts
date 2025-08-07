@@ -3,9 +3,9 @@ import { RAGService } from '../rag/RAGService';
 import { ChatService } from '../chat/ChatService';
 
 export class TemplaterIntegration {
-    private plugin: Plugin;
-    private ragService: RAGService;
-    private chatService: ChatService;
+    private plugin!: Plugin;
+    private ragService!: RAGService;
+    private chatService!: ChatService;
     private isTemplaterAvailable = false;
 
     constructor(plugin: Plugin) {
@@ -15,7 +15,7 @@ export class TemplaterIntegration {
     async initialize() {
         // Check if Templater plugin is available
         this.isTemplaterAvailable = this.checkTemplaterAvailability();
-        
+
         if (this.isTemplaterAvailable) {
             this.registerTemplaterFunctions();
             console.log('Templater integration initialized.');
@@ -39,7 +39,7 @@ export class TemplaterIntegration {
 
         try {
             const templaterPlugin = (this.plugin.app as any).plugins.plugins['templater-obsidian'];
-            
+
             // Register AI functions for Templater
             templaterPlugin.templater.functions_generator.user_functions.set('ai_chat', this.aiChat.bind(this));
             templaterPlugin.templater.functions_generator.user_functions.set('ai_search', this.aiSearch.bind(this));
@@ -60,7 +60,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Chat error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -68,7 +68,7 @@ export class TemplaterIntegration {
     async aiSearch(query: string, maxResults: number = 5): Promise<string> {
         try {
             const sources = await this.ragService.getRelevantSources(query, maxResults);
-            
+
             if (sources.length === 0) {
                 return 'No relevant sources found.';
             }
@@ -82,7 +82,7 @@ export class TemplaterIntegration {
             return result;
         } catch (error) {
             console.error('AI Search error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -94,7 +94,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Summarize error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -102,7 +102,7 @@ export class TemplaterIntegration {
     async aiGenerateContent(topic: string, type: string = 'paragraph', length: string = 'medium'): Promise<string> {
         try {
             let prompt = `Generate a ${type} about "${topic}".`;
-            
+
             switch (length) {
                 case 'short':
                     prompt += ' Keep it brief and concise.';
@@ -124,7 +124,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Generate Content error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -136,7 +136,7 @@ export class TemplaterIntegration {
             return response.content;
         } catch (error) {
             console.error('AI Extract Info error:', error);
-            return `Error: ${error.message}`;
+            return `Error: ${(error as Error).message}`;
         }
     }
 
@@ -154,7 +154,7 @@ export class TemplaterIntegration {
 
             const templatePath = `Templates/${templateName}.md`;
             await this.plugin.app.vault.create(templatePath, templateContent);
-            
+
             console.log(`AI template created: ${templatePath}`);
         } catch (error) {
             console.error('Failed to create AI template:', error);

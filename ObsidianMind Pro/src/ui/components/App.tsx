@@ -73,7 +73,7 @@ export const App: React.FC<AppProps> = ({ plugin }) => {
         try {
             // Get AI response using RAG
             const response = await plugin.chatService.sendMessage(content);
-            
+
             const assistantMessage: ChatMessage = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',

@@ -1,10 +1,10 @@
 import { Plugin } from 'obsidian';
 import { AirtableRecord } from '../utils/types';
 import { AIRTABLE_API_BASE, DEFAULT_REQUEST_TIMEOUT } from '../utils/constants';
-import { retryWithBackoff } from '../utils/helpers';
+import { retryWithBackoff, createTimeoutSignal } from '../utils/helpers';
 
 export class AirtableAPI {
-    private plugin: Plugin;
+    private plugin!: Plugin;
     private apiKey: string;
 
     constructor(plugin: Plugin) {
@@ -18,7 +18,7 @@ export class AirtableAPI {
         }
 
         const records: AirtableRecord[] = [];
-        
+
         for (const baseId of this.plugin.settings.airtableBaseIds) {
             try {
                 const baseRecords = await this.fetchRecordsFromBase(baseId);
@@ -54,7 +54,7 @@ export class AirtableAPI {
                 const url = `${AIRTABLE_API_BASE}/meta/bases/${baseId}/tables`;
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), DEFAULT_REQUEST_TIMEOUT);
-                
+
                 const fetchResponse = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -147,7 +147,7 @@ export class AirtableAPI {
             const baseId = this.plugin.settings.airtableBaseIds[0];
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), DEFAULT_REQUEST_TIMEOUT);
-            
+
             const response = await fetch(`${AIRTABLE_API_BASE}/meta/bases/${baseId}/tables`, {
                 method: 'GET',
                 headers: {

@@ -97,13 +97,13 @@ export class AIModelManager {
         const currentCustomModels = this.plugin.settings.customModels;
         currentCustomModels.push(modelConfig);
         this.plugin.settings.customModels = currentCustomModels;
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
         this.loadCustomModels(); // Reload all models including the new one
     }
 
     async removeCustomModel(modelId: string): Promise<void> {
         this.plugin.settings.customModels = this.plugin.settings.customModels.filter(m => m.id !== modelId);
-        await this.plugin.saveSettings();
+        await this.plugin.saveData(this.plugin.settings);
         this.availableModels.delete(modelId); // Remove from in-memory map
         this.loadSupportedModels(); // Reload supported models to ensure they are still there
     }

@@ -5,7 +5,7 @@ import { ToolManager } from './ToolManager';
 import { MacroCommandProcessor } from './MacroCommandProcessor';
 
 export class AdvancedFeaturesManager {
-    private plugin: Plugin;
+    private plugin!: Plugin;
     public templaterIntegration: TemplaterIntegration;
     public promptGenerator: PromptGenerator;
     public toolManager: ToolManager;
