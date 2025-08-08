@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { pipeline, Pipeline } from '@xenova/transformers';
+import { pipeline, Pipeline, env } from '@xenova/transformers';
 import { DEFAULT_EMBEDDING_MODEL, EMBEDDING_MODELS } from '../utils/constants';
 
 export class EmbeddingService {
@@ -15,6 +15,14 @@ export class EmbeddingService {
         if (this.isInitialized) return;
 
         try {
+            // Force browser-only mode for transformers
+            env.useFS = false;
+            env.allowLocalModels = false;
+            // Force WASM backend for ONNX (browser-only)
+            if (env.backends && env.backends.onnx) {
+                env.backends.onnx.executionProviders = ['wasm'];
+            }
+
             const modelName = this.plugin.settings.embeddingModel || DEFAULT_EMBEDDING_MODEL;
             console.log(`Initializing embedding model: ${modelName}`);
 
