@@ -94,6 +94,10 @@ export interface AIPluginSettings {
   syncInterval: number; // in minutes
   autoSync: boolean;
 
+  // Runtime credentials (Notion-based)
+  runtimeCredentialsEnabled: boolean;
+  secretsNotionDatabaseId: string;
+
   // Chat Settings
   maxChatHistory: number;
   showSources: boolean;
@@ -137,6 +141,8 @@ export interface MCPServiceConfig {
 	args?: string[];
 	// For http type
 	url?: string;
+	// Optional headers for HTTP MCP endpoints
+	headers?: Record<string, string>;
 	// Environment variables
 	env?: Record<string, string>;
 }
@@ -196,6 +202,10 @@ export const DEFAULT_SETTINGS: AIPluginSettings = {
     syncInterval: 60, // 1 hour
     autoSync: false,
 
+    // Runtime credentials (Notion-based)
+    runtimeCredentialsEnabled: true,
+    secretsNotionDatabaseId: '',
+
     // Chat Settings
     maxChatHistory: 50,
     showSources: true,
@@ -203,7 +213,7 @@ export const DEFAULT_SETTINGS: AIPluginSettings = {
 
     // Advanced Features
     templaterIntegration: false,
-    mcpEnabled: false,
+    mcpEnabled: true,
     customToolsEnabled: false,
     customToolsConfig: '[]',
 
@@ -211,13 +221,9 @@ export const DEFAULT_SETTINGS: AIPluginSettings = {
     mcpServices: [
         {
             name: 'notion',
-            type: 'stdio',
-            enabled: false,
-            command: 'npx',
-            args: ['-y', '@notionhq/notion-mcp-server@latest'],
-            env: {
-                'OPENAPI_MCP_HEADERS': '{"Authorization": "Bearer ${NOTION_TOKEN}", "Notion-Version": "2022-06-28"}'
-            }
+            type: 'http',
+            enabled: true,
+            url: 'https://mcp.notion.com/mcp'
         },
         {
             name: 'zapier',

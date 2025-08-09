@@ -33,8 +33,8 @@ export class ChatService {
             throw new Error(`Model ${selectedModel} not found`);
         }
 
-        // Validate API key for the selected provider
-        const apiKey = this.getApiKeyForProvider(modelConfig.provider);
+        // Resolve API key for the selected provider
+        const apiKey = await this.getApiKeyForProvider(modelConfig.provider);
         if (!validateApiKey(apiKey, modelConfig.provider)) {
             throw new Error(`Invalid or missing API key for ${modelConfig.provider}`);
         }
@@ -54,16 +54,17 @@ export class ChatService {
         };
     }
 
-    private getApiKeyForProvider(provider: string): string {
+    private async getApiKeyForProvider(provider: string): Promise<string> {
+    // Per policy: do NOT auto-fetch AI provider keys from Notion.
+    // Users must supply their own API keys in settings for cost-bearing services.
         switch (provider) {
             case 'openai':
-                return this.plugin.settings.openaiApiKey;
+                return (this.plugin.settings as any).openaiApiKey;
             case 'anthropic':
-                return this.plugin.settings.anthropicApiKey;
+                return (this.plugin.settings as any).anthropicApiKey;
             case 'google':
-                return this.plugin.settings.googleApiKey;
+                return (this.plugin.settings as any).googleApiKey;
             default:
-                // For custom models, we might need to store API keys differently
                 return '';
         }
     }

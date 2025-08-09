@@ -311,6 +311,32 @@ export class AIPluginSettingTab extends PluginSettingTab {
                         }, 2000);
                     }
                 }));
+
+        // Runtime Credentials (Notion)
+        containerEl.createEl('h3', { text: 'Runtime Credentials' });
+        new Setting(containerEl)
+            .setName('Enable Runtime Credentials from Notion')
+            .setDesc('Resolve provider API keys at runtime from your Notion secrets database')
+            .addToggle(toggle => toggle
+                .setValue(this.plugin.settings.runtimeCredentialsEnabled)
+                .onChange(async (value) => {
+                    this.plugin.settings.runtimeCredentialsEnabled = value;
+                    await this.plugin.saveData(this.plugin.settings);
+                    if (value) {
+                        try { await this.plugin.credentialsResolver.warmup(true); } catch {}
+                    }
+                }));
+
+        new Setting(containerEl)
+            .setName('Notion Secrets Database ID')
+            .setDesc('Database ID that contains Brand and API Key/Token columns')
+            .addText(text => text
+                .setPlaceholder('20e5e81a91ff813a914ecd71ce1edc9c')
+                .setValue(this.plugin.settings.secretsNotionDatabaseId)
+                .onChange(async (value) => {
+                    this.plugin.settings.secretsNotionDatabaseId = value.trim();
+                    await this.plugin.saveData(this.plugin.settings);
+                }));
     }
 }
 

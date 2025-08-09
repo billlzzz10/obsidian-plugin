@@ -15,6 +15,7 @@ import { AzureAIService } from './modules/azure-services/AzureAIService';
 import { AzureAgentService } from './modules/azure-services/AzureAgentService';
 import { AzureAISearchService } from './modules/azure-services/AzureAISearchService';
 import { AzureCosmosDBService } from './modules/azure-services/AzureCosmosDBService';
+import { CredentialsResolver } from './modules/advanced-features/CredentialsResolver';
 
 export default class AIPlugin extends Plugin {
     settings: AIPluginSettings = DEFAULT_SETTINGS;
@@ -26,6 +27,7 @@ export default class AIPlugin extends Plugin {
     chatService!: ChatService;
     advancedFeaturesManager!: AdvancedFeaturesManager;
     mcpServiceManager!: MCPServiceManager;
+    credentialsResolver!: CredentialsResolver;
 
     // Azure Services
     azureAIService!: AzureAIService;
@@ -51,6 +53,10 @@ export default class AIPlugin extends Plugin {
         this.chatService = new ChatService(this);
         this.advancedFeaturesManager = new AdvancedFeaturesManager(this);
         this.mcpServiceManager = new MCPServiceManager(this);
+        this.credentialsResolver = new CredentialsResolver(this);
+
+        // Warmup credentials cache if enabled
+        try { await this.credentialsResolver.warmup(false); } catch (e) { console.debug('credentialsResolver warmup failed', e); }
 
         // Initialize Azure services
         if (this.settings.azureAIServicesEnabled) {
@@ -111,6 +117,30 @@ export default class AIPlugin extends Plugin {
         await this.aiModelManager.initialize();
         await this.chatService.initialize();
         await this.advancedFeaturesManager.initialize();
+
+        // Start MCP services (HTTP/stdio) if enabled
+        if (this.settings.mcpEnabled && this.mcpServiceManager) {
+            for (const svc of this.settings.mcpServices) {
+                if (!svc.enabled) continue;
+                // Inject Authorization header for Notion HTTP MCP using the Notion Integration Token set in settings
+                const isNotion = svc.type === 'http' && svc.name.toLowerCase() === 'notion';
+                if (isNotion) {
+                    if (!this.settings.notionIntegrationToken) {
+                        console.warn('Notion MCP is enabled but Notion Integration Token is missing. Skipping Notion MCP start.');
+                        continue;
+                    }
+                    svc.headers = {
+                        ...(svc.headers || {}),
+                        Authorization: `Bearer ${this.settings.notionIntegrationToken}`
+                    };
+                }
+                try {
+                    await this.mcpServiceManager.startService(svc);
+                } catch (e) {
+                    console.warn(`Failed to start MCP service ${svc.name}`, e);
+                }
+            }
+        }
 
         this.registerView(
             VIEW_TYPE_CHAT,

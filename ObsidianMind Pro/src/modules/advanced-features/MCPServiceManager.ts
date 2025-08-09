@@ -92,6 +92,8 @@ export class MCPServiceManager {
 
         return statuses;
     }
+
+    // No global settings access here; service headers come from config.
 }
 
 class MCPService {
@@ -152,7 +154,8 @@ class MCPService {
                 method: 'GET',
                 headers: {
                     'Accept': 'text/event-stream',
-                    'Cache-Control': 'no-cache'
+                    'Cache-Control': 'no-cache',
+                    ...(this.config.headers || {})
                 }
             });
 
@@ -213,7 +216,8 @@ class MCPService {
         const response = await fetch(this.config.url!, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                ...(this.config.headers || {})
             },
             body: JSON.stringify({
                 jsonrpc: '2.0',
