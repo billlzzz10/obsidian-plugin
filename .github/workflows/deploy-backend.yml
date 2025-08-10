@@ -1,64 +1,123 @@
-permissions:
-  contents: read
-name: Deploy Backend to Azure
+name: Deploy Backend to Azure (Unified)
 
 on:
   push:
     branches: [ main ]
     paths:
       - 'obsidian-n-a/backend/**'
-  workflow_dispatch:  # ให้สามารถรัน workflow นี้ด้วยตัวเองได้
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  BACKEND_PATH: obsidian-n-a/backend
+  AZURE_RG: ObsidianBackendRG
+  AZURE_LOCATION: eastus
+  AZURE_APP_NAME: obsidian-backend
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      
-    - name: Login to Azure
-      uses: azure/login@v2
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    - name: Login to Azure Container Registry
-      uses: azure/docker-login@v2
-      with:
-        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-    
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: ./obsidian-n-a/backend
-        push: true
-        tags: ${{ secrets.REGISTRY_LOGIN_SERVER }}/obsidian-backend:${{ github.sha }}
-        file: ./obsidian-n-a/backend/Dockerfile
-    
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: obsidian-backend
-        slot-name: production
-        images: ${{ secrets.REGISTRY_LOGIN_SERVER }}/obsidian-backend:${{ github.sha }}
-        
-    - name: Azure CLI script - Update App Settings
-      uses: azure/CLI@v1
-      with:
-        inlineScript: |
-          # แปลงไฟล์ .env.production เป็นรูปแบบที่ใช้กับ az webapp config appsettings set
-          cd ./obsidian-n-a/backend
-          while IFS= read -r line || [ -n "$line" ]; do
-            # ข้ามบรรทัดที่เป็นความคิดเห็นหรือว่างเปล่า
-            [[ $line = \#* || -z $line ]] && continue
-            # แยกตัวแปรและค่า
-            key=$(echo $line | cut -d= -f1)
-            value=$(echo $line | cut -d= -f2-)
-            # เพิ่มการตั้งค่าในแอป
-            az webapp config appsettings set --name obsidian-backend --resource-group ObsidianBackendRG --settings "$key=$value"
-          done < .env.production
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Ensure Resource Group
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az group create -n "${{ env.AZURE_RG }}" -l "${{ env.AZURE_LOCATION }}"
+
+      - name: Deploy infrastructure (Bicep)
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az deployment group create \
+              --resource-group "${{ env.AZURE_RG }}" \
+              --template-file "$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}/deploy.bicep" \
+              --parameters appName="${{ env.AZURE_APP_NAME }}" location="${{ env.AZURE_LOCATION }}" sku=B1 pythonVersion=3.11
+
+      - name: Build backend package (zip)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}"
+          # Clean previous artifact
+          rm -f app.zip || true
+          # Include app source and requirements
+          zip -r app.zip src requirements.txt requirements config -x "**/__pycache__/*"
+          ls -lh app.zip
+
+      - name: Configure app settings from .env.production
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            APP_NAME="${{ env.AZURE_APP_NAME }}"
+            RG="${{ env.AZURE_RG }}"
+            ENV_FILE="$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}/.env.production"
+            
+            # Base settings helpful for Python builds
+            az webapp config appsettings set --name "$APP_NAME" --resource-group "$RG" --settings \
+              SCM_DO_BUILD_DURING_DEPLOYMENT=true \
+              PYTHON_ENABLE_GUNICORN=1 \
+              ENVIRONMENT=production \
+              PYTHONPATH=/home/site/wwwroot/src
+            
+            # Apply key=value lines from .env.production (if exists)
+            if [ -f "$ENV_FILE" ]; then
+              while IFS= read -r line || [ -n "$line" ]; do
+                # Skip comments and empty lines
+                if [ -z "$line" ] || [[ "$line" =~ ^# ]]; then continue; fi
+                key="${line%%=*}"
+                value="${line#*=}"
+                # Trim spaces
+                key="$(echo "$key" | xargs)"
+                value="$(echo "$value" | xargs)"
+                if [ -n "$key" ] && [ -n "$value" ]; then
+                  az webapp config appsettings set --name "$APP_NAME" --resource-group "$RG" --settings "$key=$value" >/dev/null
+                fi
+              done < "$ENV_FILE"
+            fi
+
+      - name: Set startup command
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp config set \
+              --resource-group "${{ env.AZURE_RG }}" \
+              --name "${{ env.AZURE_APP_NAME }}" \
+              --startup-file "python -m src.main"
+
+      - name: Deploy zip to App Service
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp deploy \
+              --resource-group "${{ env.AZURE_RG }}" \
+              --name "${{ env.AZURE_APP_NAME }}" \
+              --src-path "$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}/app.zip" \
+              --type zip
+
+      - name: Restart app and show URL
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            # Restart the app to ensure new settings take effect
+            az webapp restart --name "${{ env.AZURE_APP_NAME }}" --resource-group "${{ env.AZURE_RG }}"
+            
+            # Show the app URL
+            HOST=$(az webapp show --name "${{ env.AZURE_APP_NAME }}" --resource-group "${{ env.AZURE_RG }}" --query defaultHostName -o tsv)
+            echo "🚀 App deployed successfully!"
+            echo "App URL: https://$HOST"
+            echo "Health check: https://$HOST/health"
+            echo "API docs: https://$HOST/docs"
