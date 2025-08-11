@@ -1,0 +1,13 @@
+{
+  "id": "mind-pro-obsidian-plugin",
+  "name": "mind-pro-obsidian-plugin",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Advanced AI plugin with RAG, Embedding, Notion/Airtable integration, and multi-model support",
+  "author": "ObsidianMind Pro Team",
+  "authorUrl": "https://github.com/obsidianmind-pro/obsidianmind-pro",
+  "fundingUrl": "https://github.com/sponsors/obsidianmind-pro",
+  "isDesktopOnly": false,
+  "main": "main.js"
+}
+
