@@ -323,7 +323,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                     this.plugin.settings.runtimeCredentialsEnabled = value;
                     await this.plugin.saveData(this.plugin.settings);
                     if (value) {
-                        try { await this.plugin.credentialsResolver.warmup(true); } catch (e) { console.debug('credentialsResolver warmup failed', e); }
+                        try { await this.plugin.credentialsResolver.warmup(true); } catch (e) { this.plugin.logger.debug('credentialsResolver warmup failed', e); }
                     }
                 }));
 
