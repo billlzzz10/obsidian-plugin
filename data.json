@@ -1,0 +1,58 @@
+{
+  "backendUrl": "http://localhost:8000",
+  "connectionTimeout": 30000,
+  "retryAttempts": 3,
+  "defaultModel": {
+    "id": "gpt-3.5-turbo",
+    "name": "GPT-3.5 Turbo",
+    "provider": "openai",
+    "maxTokens": 4096,
+    "supportsStreaming": true
+  },
+  "availableModels": [
+    {
+      "id": "gpt-3.5-turbo",
+      "name": "GPT-3.5 Turbo",
+      "provider": "openai",
+      "maxTokens": 4096,
+      "supportsStreaming": true
+    },
+    {
+      "id": "gpt-4",
+      "name": "GPT-4",
+      "provider": "openai",
+      "maxTokens": 8192,
+      "supportsStreaming": true
+    },
+    {
+      "id": "claude-3-sonnet",
+      "name": "Claude 3 Sonnet",
+      "provider": "anthropic",
+      "maxTokens": 4096,
+      "supportsStreaming": true
+    }
+  ],
+  "ragEnabled": true,
+  "maxSources": 5,
+  "minConfidence": 0.7,
+  "embeddingModel": "all-MiniLM-L6-v2",
+  "maxTokens": 1000,
+  "temperature": 0.7,
+  "streamingEnabled": true,
+  "notionIntegrationToken": "",
+  "airtableAccessToken": "",
+  "showSidebar": true,
+  "darkMode": true,
+  "fontSize": 14,
+  "debugMode": false,
+  "cacheEnabled": true,
+  "autoSyncEnabled": false,
+  "syncInterval": 300000,
+  "selectedModel": "azure-gpt-4",
+  "chunkSize": 300,
+  "azureApiKey": "Obsidian start-up time breakdown  Obsidian version: v1.8.10 Installer version: v1.8.10 Operating system: Windows 10 Pro 10.0.19045  - Total startup time: 14,494ms - Initialization: 1,627ms - Vault (206 files): 395ms - Workspace (17 tabs, 15 deferred): 464ms - Core plugins: 182ms - Community plugins (17 active): 11,827ms   - QuickAdd (v2.1.0): 4,330ms   - Smart Composer (v1.2.1): 2,152ms   - APIRequest (v2.0.3): 2,115ms   - Text Generator (v0.7.52): 1,126ms   - Copilot (v2.9.4): 619ms   - Remotely Save (v0.5.25): 553ms   - Iconize (v2.14.7): 288ms   - Dataview (v0.5.68): 140ms   - Smart Connections (v3.0.68): 138ms   - Gemini Scribe (v3.3.0): 86ms   - Templater (v2.14.1): 68ms   - Importer (v1.6.21): 49ms   - TickTickSync (v1.1.13): 35ms   - Dashboard navigator (v7.0.0): 32ms   - Commander (v0.5.4): 30ms   - ChatGPT MD (v2.7.0): 28ms   - Obsidian AI Enhanced (v0.1.0): 5ms",
+  "azureEndpoint": "https://billlzzz-1.openai.azure.com/",
+  "azureRegion": "Global Standard",
+  "streamResponses": true,
+  "showSources": true
+}

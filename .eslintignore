@@ -1,0 +1,7 @@
+# Build output
+main.js
+main.js.map
+
+# ถ้ามีโฟลเดอร์ dist หรือ build ก็เพิ่มด้วย
+dist/
+build/

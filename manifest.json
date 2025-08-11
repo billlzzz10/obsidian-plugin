@@ -1,0 +1,11 @@
+{
+  "id": "obsidian-ai-enhanced",
+  "name": "Obsidian AI Enhanced",
+  "version": "0.1.0",
+  "minAppVersion": "0.15.0",
+  "description": "AI Enhanced plugin for Obsidian with Azure AI support.",
+  "author": "Obsidian AI Enhanced Team",
+  "authorUrl": "",
+  "isDesktopOnly": false,
+  "main": "main.js"
+}

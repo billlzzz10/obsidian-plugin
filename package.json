@@ -1,0 +1,53 @@
+{
+  "name": "obsidian-ai-enhanced",
+  "version": "0.1.0",
+  "description": "AI Enhanced plugin for Obsidian (experimental build system)",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.cjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.cjs production",
+    "test": "jest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write src"
+  },
+  "keywords": [
+    "obsidian",
+    "ai",
+    "plugin"
+  ],
+  "author": "Obsidian AI Enhanced Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "esbuild": "0.25.8",
+    "eslint": "^8.57.1",
+    "globals": "^16.3.0",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.0.0",
+    "jiti": "^2.5.1",
+    "obsidian": "latest",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.0.0",
+    "tslib": "2.8.1",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.39.0"
+  },
+  "dependencies": {
+    "@azure/ai-form-recognizer": "^4.0.0",
+    "@azure/ai-text-analytics": "^5.1.0",
+    "@azure/cosmos": "^3.17.3",
+    "@azure/openai": "^1.0.0-beta.5",
+    "@azure/search-documents": "^11.3.0",
+    "@xenova/transformers": "^2.17.2",
+    "onnxruntime-web": "^1.17.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^5.0.7"
+  }
+}
