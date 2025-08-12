@@ -20,22 +20,74 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      AZURE_CREDENTIALS_JSON: ${{ secrets.AZURE_CREDENTIALS_JSON }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Azure Login (OIDC)
+      - name: Extract Azure credentials
+        id: creds
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${AZURE_CREDENTIALS_JSON:-}" ]; then
+            echo "Missing AZURE_CREDENTIALS_JSON secret. Provide JSON: {\"clientId\":\"...\",\"tenantId\":\"...\",\"subscriptionId\":\"...\"}" >&2
+            exit 1
+          fi
+          clientId=$(echo "$AZURE_CREDENTIALS_JSON" | jq -r '.clientId // empty')
+          tenantId=$(echo "$AZURE_CREDENTIALS_JSON" | jq -r '.tenantId // empty')
+          subscriptionId=$(echo "$AZURE_CREDENTIALS_JSON" | jq -r '.subscriptionId // empty')
+          for v in clientId tenantId subscriptionId; do
+            if [ -z "${!v}" ]; then echo "Key $v missing in AZURE_CREDENTIALS_JSON" >&2; exit 1; fi
+          done
+          echo "AZURE_CLIENT_ID=$clientId" >> $GITHUB_ENV
+          echo "AZURE_TENANT_ID=$tenantId" >> $GITHUB_ENV
+          echo "AZURE_SUBSCRIPTION_ID=$subscriptionId" >> $GITHUB_ENV
+          echo "client-id=$clientId" >> $GITHUB_OUTPUT
+          echo "tenant-id=$tenantId" >> $GITHUB_OUTPUT
+          echo "subscription-id=$subscriptionId" >> $GITHUB_OUTPUT
+          echo "Credentials extracted."
+
+  - name: Azure Login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ vars.AZURE_CLIENT_ID }}
-          tenant-id: ${{ vars.AZURE_TENANT_ID }}
-          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
 
       - name: Ensure Resource Group
         uses: azure/cli@v2
         with:
           inlineScript: |
             az group create -n "${{ env.AZURE_RG }}" -l "${{ env.AZURE_LOCATION }}"
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ${{ env.BACKEND_PATH }}/requirements.txt
+
+      - name: Pre-install dependencies into publish folder
+        working-directory: ${{ env.BACKEND_PATH }}
+        run: |
+          set -euo pipefail
+          PUBLISH=app_publish
+          rm -rf "$PUBLISH" || true
+          mkdir -p "$PUBLISH"
+          echo "Installing dependencies (vendor mode) ..."
+          pip install --upgrade pip
+          pip install --no-cache-dir -r requirements.txt -t "$PUBLISH"
+          echo "Copying source files ..."
+          cp -r src "$PUBLISH"/src
+          [ -f requirements.txt ] && cp requirements.txt "$PUBLISH"/
+          [ -f .env.production ] && cp .env.production "$PUBLISH"/
+          pushd "$PUBLISH" >/dev/null
+          echo "Creating deployment zip ..."
+          zip -r ../app.zip . >/dev/null
+          popd >/dev/null
+          ls -lh app.zip
 
       - name: Deploy infrastructure (Bicep)
         uses: azure/cli@v2
@@ -45,17 +97,6 @@ jobs:
               --resource-group "${{ env.AZURE_RG }}" \
               --template-file "$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}/deploy.bicep" \
               --parameters appName="${{ env.AZURE_APP_NAME }}" location="${{ env.AZURE_LOCATION }}" sku=B1 pythonVersion=3.11
-
-      - name: Build backend package (zip)
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd "$GITHUB_WORKSPACE/${{ env.BACKEND_PATH }}"
-          # Clean previous artifact
-          rm -f app.zip || true
-          # Include app source and requirements
-          zip -r app.zip src requirements.txt requirements config -x "**/__pycache__/*"
-          ls -lh app.zip
 
       - name: Configure app settings from .env.production
         uses: azure/cli@v2
@@ -121,3 +162,5 @@ jobs:
             echo "App URL: https://$HOST"
             echo "Health check: https://$HOST/health"
             echo "API docs: https://$HOST/docs"
+    
+  
