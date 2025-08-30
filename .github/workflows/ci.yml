@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline.dt
 permissions:
   contents: read
   security-events: write
