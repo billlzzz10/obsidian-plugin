@@ -327,8 +327,7 @@ export class AIPluginSettingTab extends PluginSettingTab {
                             await this.plugin.credentialsResolver.warmup(true);
                         } catch (e) {
                             // Log and continue without failing the settings UI
-                            console.warn('Credentials resolver warmup failed:', e);
-                        }
+                            console.warn('Credentials resolver warmup failed:')
                     }
                 }));
 
