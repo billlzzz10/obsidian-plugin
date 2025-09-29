@@ -9,7 +9,8 @@ pydantic-settings==2.1.0
 sentence-transformers==2.2.2
 transformers==4.53.0
 torch==2.8.0
-numpy==1.24.3
+# numpy version is installed earlier in setup_and_run.ps1 based on Python version (avoid source build failures)
+# numpy==1.24.3
 scikit-learn==1.5.0
 
 # Vector database

@@ -14,9 +14,24 @@ function New-AppVenv {
     )
     if (Test-Path $Path) {
         Write-Host "Removing existing venv at $Path ..."
-        Remove-Item -Recurse -Force $Path -ErrorAction SilentlyContinue
+        for ($i=0; $i -lt 3; $i++) {
+            try {
+                Remove-Item -Recurse -Force $Path -ErrorAction Stop
+                break
+            } catch {
+                Write-Host "Retry remove attempt $($i+1) failed: $($_.Exception.Message)" -ForegroundColor Yellow
+                Start-Sleep -Milliseconds 500
+            }
+        }
+        if (Test-Path $Path) {
+            try {
+                [System.IO.Directory]::Delete($Path, $true)
+            } catch {
+                Write-Host "Final directory delete attempt failed; continuing (may reuse existing env)" -ForegroundColor Yellow
+            }
+        }
     }
-    New-Item -ItemType Directory -Path $Path -Force | Out-Null
+    if (-not (Test-Path $Path)) { New-Item -ItemType Directory -Path $Path -Force | Out-Null }
     Write-Host "Creating virtual environment with $Launcher at $Path ..."
     & $Launcher -m venv $Path
     return $LASTEXITCODE
@@ -108,7 +123,7 @@ if ($numpyVersion) {
 }
 
 Write-Host "Installing backend dependencies (prefer binary wheels)..."
-& $venvExe -m pip install --prefer-binary -r requirements.txt | Out-Null
+& $venvExe -m pip install --prefer-binary -r requirements.txt
 
 # Start Uvicorn server using HOST and PORT from .env
 Write-Host "Running backend server on $env:HOST:$env:PORT ..."

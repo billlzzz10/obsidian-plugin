@@ -1,0 +1,38 @@
+# type
+- name: "type:core"       ; color: "1f6feb"
+- name: "type:plugin"     ; color: "1f6feb"
+- name: "type:service"    ; color: "1f6feb"
+- name: "type:docs"       ; color: "1f6feb"
+- name: "type:ux"         ; color: "1f6feb"
+
+# status
+- name: "status:todo"       ; color: "6e7781"
+- name: "status:in-progress"; color: "d4a72c"
+- name: "status:review"     ; color: "a371f7"
+- name: "status:blocked"    ; color: "d1242f"
+- name: "status:done"       ; color: "2da44e"
+- name: "status:deprecated" ; color: "6e7781"
+
+# priority
+- name: "priority:high"   ; color: "d1242f"
+- name: "priority:medium" ; color: "d4a72c"
+- name: "priority:low"    ; color: "6e7781"
+
+# area
+- name: "area:backend"  ; color: "bf3989"
+- name: "area:frontend" ; color: "bf3989"
+- name: "area:ai"       ; color: "bf3989"
+- name: "area:infra"    ; color: "bf3989"
+- name: "area:obsidian" ; color: "bf3989"
+- name: "area:notion"   ; color: "bf3989"
+
+# size
+- name: "size:S" ; color: "96d0ff"
+- name: "size:M" ; color: "54aeff"
+- name: "size:L" ; color: "1f6feb"
+
+# misc
+- name: "bug"              ; color: "d1242f"
+- name: "enhancement"      ; color: "2da44e"
+- name: "question"         ; color: "6e7781"
+- name: "good first issue" ; color: "2da44e"

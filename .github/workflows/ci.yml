@@ -1,6 +1,7 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline.dt
 permissions:
   contents: read
+  security-events: write
 
 on:
   push:
@@ -13,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
 
     steps:
     - name: Checkout code
@@ -66,10 +67,13 @@ jobs:
         cd "ObsidianMind Pro"
         npm audit --audit-level moderate
 
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: javascript
+
     - name: Run CodeQL Analysis
       uses: github/codeql-action/analyze@v3
-      with:
-        language: javascript
 
   release:
     needs: [test, security-scan]
